@@ -53,16 +53,40 @@ static bool	isValidInt(std::string const &literal) {
 	return true;
 }
 
+static bool isValidNumDec(std::string const &numPart) {
+	bool	dot = false;
+	if ((numPart[0] == '-' && !std::isdigit(numPart[1])))
+		return false;
+	size_t	start = 0;
+	if (numPart[0] == '-')
+		start = 1;
+	for (size_t i = start; i < numPart.length(); i++)
+	{
+		if (numPart[i] == '.' ) {
+			if (dot == true)
+				return false;
+			dot = true;
+		} else if (!std::isdigit(numPart[i]))
+			return false;
+	}
+	return true;
+}
+
 static bool	isValidFloat(std::string const &literal) {
 	if (literal.back() != 'f')
 		return false;
-	return true;
+	std::string numPart = literal.substr(0, literal.length() - 1);
+
+	return isValidNumDec(numPart);
+	
 }
 
 static bool	isValidDouble(std::string const &literal) {
 	if (literal.back() == 'f')
 		return false;
-	return true;
+
+	return isValidNumDec(literal);
+
 }
 
 static void display(Values & values) {
@@ -115,17 +139,16 @@ int ScalarConverter::convert(std::string const &literal) {
 			}
 			if (values.i >= 0 && values.i <= 127) {
 				values.c = static_cast<char>(values.i);
-			} else {
+			} else
 				values.char_displayable = false;
-			}
-		}
-		else if (literal == "nan" || literal == "+inf" || literal == "-inf" || 
-         literal == "nanf" || literal == "+inff" || literal == "-inff") {
+		} else if (literal == "nan" || literal == "+inf" || literal == "-inf" || 
+         			literal == "nanf" || literal == "+inff" || literal == "-inff") {
+			
 			NaNInf(values, literal);
 			return 0;
+
 		}
-		/* else if (isValidFloat(literal)) {
-			std::cout << "It's a float\n";
+		else if (isValidFloat(literal)) {
 			try {
                 values.f = std::stof(literal);
                 values.d = static_cast<double>(values.f);
@@ -137,14 +160,21 @@ int ScalarConverter::convert(std::string const &literal) {
             }
 		}
 		else if (isValidDouble(literal)) {
-			std::cout << "It's a double\n";
-			return 0;
-		} */
+			try {
+                values.d = std::stod(literal);
+                values.f = static_cast<float>(values.d);
+                values.i = static_cast<int>(values.d);
+                values.char_displayable = false;
+            } catch (const std::exception& e) {
+                std::cerr << "Error: Invalid float conversion." << std::endl;
+                return 1;
+            }
 		}
 		else {
 			std::cout << "Invalid input" << std::endl;
 			return 1;
 		}
 		display(values);						
-		return 0;								
+	}
+	return 0;		
 }
