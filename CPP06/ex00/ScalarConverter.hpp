@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:01:43 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/17 20:21:58 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/07/18 18:33:04 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class	ScalarConverter
 		ScalarConverter(const ScalarConverter &other);
 		ScalarConverter &operator=(const ScalarConverter &other); */
 
-	static void convert(std::string const &literal);
+	static int convert(std::string const &literal);
 };
 
 #endif           // SCALARCONVERTER_HPP
