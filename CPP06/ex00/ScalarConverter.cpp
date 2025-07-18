@@ -5,6 +5,7 @@
 #include <string>
 #include <cctype>
 #include <iomanip>
+#include <limits>
 
 struct Values
 {
@@ -18,6 +19,23 @@ struct Values
     Values() : c(0), char_displayable(true), i(0), f(0.0f), d(0.0) {}
 
 };
+
+static void NaNInf(Values &values, const std::string &literal) {
+	if (literal == "nanf" || literal == "nan") {
+				values.f = std::numeric_limits<float>::quiet_NaN();
+				values.d = std::numeric_limits<double>::quiet_NaN();
+			} else if (literal == "-inff" || literal == "-inf") {
+				values.f = -std::numeric_limits<float>::infinity();
+				values.d = -std::numeric_limits<double>::infinity();
+			} else if (literal == "+inff" || literal == "+inf") {
+				values.f = std::numeric_limits<float>::infinity();
+				values.d = std::numeric_limits<double>::infinity();
+			}
+			std::cout << "char:   impossible" << std::endl;
+			std::cout << "int:    impossible" << std::endl;
+			std::cout << "float:  " << values.f << "f" << std::endl;
+			std::cout << "double: " << values.d << std::endl;
+}
 
 static bool	isValidInt(std::string const &literal) {
 	if (literal.back() == 'f')
@@ -35,13 +53,13 @@ static bool	isValidInt(std::string const &literal) {
 	return true;
 }
 
-bool	isValidFloat(std::string const &literal) {
+static bool	isValidFloat(std::string const &literal) {
 	if (literal.back() != 'f')
 		return false;
 	return true;
 }
 
-bool	isValidDouble(std::string const &literal) {
+static bool	isValidDouble(std::string const &literal) {
 	if (literal.back() == 'f')
 		return false;
 	return true;
@@ -85,7 +103,6 @@ int ScalarConverter::convert(std::string const &literal) {
 		values.d = static_cast<double>(literal[0]);
 	} else if (literal.length() > 1)
 	{
-		// isinteger? isfloat? isdouble?
 		if (isValidInt(literal)) {
 			try {
 				values.i = std::stoi(literal);
@@ -102,31 +119,32 @@ int ScalarConverter::convert(std::string const &literal) {
 				values.char_displayable = false;
 			}
 		}
-		else if (isValidFloat(literal)) {
-			std::cout << "It's a float\n";
+		else if (literal == "nan" || literal == "+inf" || literal == "-inf" || 
+         literal == "nanf" || literal == "+inff" || literal == "-inff") {
+			NaNInf(values, literal);
 			return 0;
+		}
+		/* else if (isValidFloat(literal)) {
+			std::cout << "It's a float\n";
+			try {
+                values.f = std::stof(literal);
+                values.d = static_cast<double>(values.f);
+                values.i = static_cast<int>(values.f);
+                values.char_displayable = false;
+            } catch (const std::exception& e) {
+                std::cerr << "Error: Invalid float conversion." << std::endl;
+                return 1;
+            }
 		}
 		else if (isValidDouble(literal)) {
 			std::cout << "It's a double\n";
 			return 0;
-		}
-		
-		/* if (literal == "nan" || literal == "+inf" || literal == "-inf") {
-			std::cout << "nan inf -inf" << std::endl;
-			// ? what for char, int, float, double?
-			return 0;
-		}
-		else if (literal == "nanf" || literal == "+inff" || literal == "-inff") {
-			std::cout << "nanf inff -inff" << std::endl;
-			// ? what for char, int, float, double?
-			return 0;
 		} */
-		
-	}
-	else {
-		std::cout << "Invalid input" << std::endl;
-		return 1;
-	}
-	display(values);
-	return 0;
+		}
+		else {
+			std::cout << "Invalid input" << std::endl;
+			return 1;
+		}
+		display(values);						
+		return 0;								
 }
