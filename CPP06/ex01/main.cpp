@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 19:01:52 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/19 19:41:08 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/07/19 19:58:17 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "Data.hpp"
 #include <iostream>
 #include <cstdint>
+#include <string>
 
 int	main( void ) {
 
