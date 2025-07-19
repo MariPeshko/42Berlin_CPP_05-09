@@ -6,6 +6,7 @@
 #include <cctype>
 #include <iomanip>
 #include <limits>
+#include <cmath>
 
 struct Values
 {
@@ -20,22 +21,7 @@ struct Values
 
 };
 
-static void NaNInf(Values &values, const std::string &literal) {
-	if (literal == "nanf" || literal == "nan") {
-				values.f = std::numeric_limits<float>::quiet_NaN();
-				values.d = std::numeric_limits<double>::quiet_NaN();
-			} else if (literal == "-inff" || literal == "-inf") {
-				values.f = -std::numeric_limits<float>::infinity();
-				values.d = -std::numeric_limits<double>::infinity();
-			} else if (literal == "+inff" || literal == "+inf") {
-				values.f = std::numeric_limits<float>::infinity();
-				values.d = std::numeric_limits<double>::infinity();
-			}
-			std::cout << "char:   impossible" << std::endl;
-			std::cout << "int:    impossible" << std::endl;
-			std::cout << "float:  " << values.f << "f" << std::endl;
-			std::cout << "double: " << values.d << std::endl;
-}
+
 
 static bool	isValidInt(std::string const &literal) {
 	if (literal.back() == 'f')
@@ -91,7 +77,7 @@ static bool	isValidDouble(std::string const &literal) {
 
 static void display(Values & values) {
 	// Output the results
-	std::cout << std::fixed << std::setprecision(2);
+	std::cout << std::fixed << std::setprecision(1);
 	if (values.char_displayable) {
 		std::cout << "char:   " << values.c << std::endl;
 	}
@@ -103,6 +89,56 @@ static void display(Values & values) {
 	std::cout << "double: " << std::right << values.d << std::endl;
 }
 
+static void	NaNInf(Values &values, const std::string &literal) {
+	try {
+		if (literal == "nanf" || literal == "+inff" || literal == "-inff") {
+			values.f = std::stof(literal);
+			values.d = static_cast<double>(values.f);
+		} else if (literal == "nan" || literal == "+inf" || literal == "-inf") {
+			values.d = std::stod(literal);
+			values.f = static_cast<float>(values.d);
+		} if (std::isnan(values.f) || std::isnan(values.d) ||
+			std::isinf(values.f) || std::isinf(values.d)) {
+				std::cout << "char:   impossible" << std::endl;
+				std::cout << "int:    impossible" << std::endl;
+				std::cout << "float:  " << values.f << "f" << std::endl;
+				std::cout << "double: " << values.d << std::endl;
+		}
+	} catch (const std::exception& e) {
+		// Conversion failed, continue to next validation check
+	}
+}
+
+static int	one_char(std::string const &literal, Values & values) {
+	
+	if(isdigit(static_cast<unsigned char>(literal[0])))
+	{
+		try {
+			values.i = std::stoi(literal);
+			values.f = static_cast<float>(values.i);
+			values.d = static_cast<double>(values.i);
+		}
+		catch (const std::out_of_range &e) {
+			std::cerr << "Error: " << literal << " is out of range. what(): " << e.what() << std::endl;
+			return 1;
+		}
+		values.char_displayable = false;
+		return 0;
+	} else {
+		values.c = literal[0];
+		if (isspace(static_cast<unsigned char>(literal[0]))) {
+			values.char_displayable = false;
+		}
+		/* if (isprint(static_cast<unsigned char>(literal[0]))) {
+			values.c = literal[0];
+		} */
+		values.i = static_cast<int>(values.c);
+		values.f = static_cast<float>(values.c);
+		values.d = static_cast<double>(values.c);
+	}
+	return 0;
+}
+
 /** take as a parameter a string representation of a C++ literal in its most common
 form and output its value in the following series of scalar types */
 // Takes the input from the command line.
@@ -110,24 +146,20 @@ int ScalarConverter::convert(std::string const &literal) {
     
 	Values values;
 	
-    if (literal.empty()) {
+	if (literal.empty()) {
         std::cerr << "Error: Empty input." << std::endl;
         return 1;
-    }
-	// int or ascii
-    if (literal.length() == 1) {
-		if (isspace(static_cast<unsigned char>(literal[0]))) {
-			values.char_displayable = false;
-		}
-		if (isprint(static_cast<unsigned char>(literal[0]))) {
-			values.c = literal[0];
-		}
-		values.i = static_cast<int>(literal[0]);
-		values.f = static_cast<float>(literal[0]);
-		values.d = static_cast<double>(literal[0]);
-	} else if (literal.length() > 1)
+    } if (literal.length() == 1) {
+		if (one_char(literal, values) == 1)
+			return 1;		
+	}
+	else if (literal.length() > 1)
 	{
-		if (isValidInt(literal)) {
+		if (literal == "nan" || literal == "nanf" || literal == "+inf" || 
+			literal == "+inff" || literal == "-inf" || literal == "-inff") {
+				NaNInf(values, literal);
+				return 0;
+		} if (isValidInt(literal)) {
 			try {
 				values.i = std::stoi(literal);
 				values.f = static_cast<float>(values.i);
@@ -137,44 +169,36 @@ int ScalarConverter::convert(std::string const &literal) {
 				std::cerr << "Error: " << literal << " is out of range. what(): " << e.what() << std::endl;
 				return 1;
 			}
-			if (values.i >= 0 && values.i <= 127) {
+			if (values.i >= 33 && values.i <= 126) {
 				values.c = static_cast<char>(values.i);
 			} else
 				values.char_displayable = false;
-		} else if (literal == "nan" || literal == "+inf" || literal == "-inf" || 
-         			literal == "nanf" || literal == "+inff" || literal == "-inff") {
-			
-			NaNInf(values, literal);
-			return 0;
-
-		}
-		else if (isValidFloat(literal)) {
+		} else if (isValidFloat(literal)) {
 			try {
                 values.f = std::stof(literal);
                 values.d = static_cast<double>(values.f);
                 values.i = static_cast<int>(values.f);
                 values.char_displayable = false;
-            } catch (const std::exception& e) {
+    		} catch (const std::exception& e) {
                 std::cerr << "Error: Invalid float conversion." << std::endl;
                 return 1;
-            }
-		}
-		else if (isValidDouble(literal)) {
+        	}
+		} else if (isValidDouble(literal)) {
 			try {
                 values.d = std::stod(literal);
                 values.f = static_cast<float>(values.d);
                 values.i = static_cast<int>(values.d);
                 values.char_displayable = false;
             } catch (const std::exception& e) {
-                std::cerr << "Error: Invalid float conversion." << std::endl;
+                std::cerr << "Error: Invalid double conversion." << std::endl;
                 return 1;
             }
 		}
 		else {
-			std::cout << "Invalid input" << std::endl;
+			std::cout << "Invalid input" << std::endl; // Do I need it?
 			return 1;
 		}
-		display(values);						
 	}
+	display(values);
 	return 0;		
 }
