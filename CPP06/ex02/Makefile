@@ -1,6 +1,6 @@
 NAME = dynamic
 
-SRCS = main.cpp Base.cpp
+SRCS = main.cpp
 OBJ_DIR=obj/
 OBJS=$(SRCS:%.cpp=$(OBJ_DIR)%.o)
 

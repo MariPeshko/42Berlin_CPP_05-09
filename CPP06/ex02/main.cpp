@@ -6,14 +6,21 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 17:30:40 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/19 18:48:29 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/07/21 14:59:49 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Base.hpp"
 #include <iostream>
 #include <ctime>    // for time()
 #include <cstdlib>  // for rand() and srand()
+
+class Base
+{
+
+	public:
+    	virtual ~Base( void ) {};
+
+};
 
 class A : public Base {};
 class B : public Base {};
@@ -84,16 +91,19 @@ static void	identify(Base& p) {
 	try {
 		A & a = dynamic_cast<A &>(p);
 		std::cout << "Indentified a reference of a type A" << std::endl;
+		return ;
 	}
 	catch ( std::bad_cast &bc ) { }
 	try {
 		B & b = dynamic_cast<B &>(p);
 		std::cout << "Indentified a reference of a type B" << std::endl;
+		return ;
 	}
 	catch ( std::bad_cast &bc ) { }
 	try {
 		C & b = dynamic_cast<C &>(p);
 		std::cout << "Indentified a reference of a type C" << std::endl;
+		return ;
 	}
 	catch ( std::bad_cast &bc ) { }
 	std::cout << "Unknown reference type" << std::endl;
@@ -106,11 +116,11 @@ int	main ( void ) {
 	identify(a);
 	identify(*a);
 	delete a;
-	std::cout << "_ _ _ _ TEST CLASS _ _ _ _" << std:: endl;
+	
+/* 	std::cout << "_ _ _ _ TEST CLASS _ _ _ _" << std:: endl;
 	T *t = new T;
 	identify(t);
 	identify(*t);
 	delete t;
-	return 0;
+	return 0; */
 }
-

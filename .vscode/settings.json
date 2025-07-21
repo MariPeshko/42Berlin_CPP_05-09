@@ -51,6 +51,9 @@
         "thread": "cpp",
         "typeinfo": "cpp",
         "iomanip": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "optional": "cpp",
+        "ranges": "cpp",
+        "span": "cpp"
     }
 }
