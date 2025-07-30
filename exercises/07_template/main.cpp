@@ -38,10 +38,25 @@ int main() {
     point_container.print(); // Works because WE (the user) provided operator<< for Point
 
     // Instantiation 4: T is std::vector<int>
+
+    // In C++98, you have to populate vectors element by element, 
+    // or use helper functions.
+    std::vector<int> vec1;
+    vec1.push_back(1);
+    vec1.push_back(2);
+
+    std::vector<int> vec2;
+    vec2.push_back(3);
+    vec2.push_back(4);
+    vec2.push_back(5);
+
     // This will FAIL to compile if operator<< for std::vector<int> is not visible
     // (std::vector does NOT have a default operator<<)
-    // MyContainer<std::vector<int>> vec_container({1,2}, {3,4,5});
-    // vec_container.print(); // COMPILE ERROR: No match for 'operator<<' (operand types are 'std::ostream' and 'const std::vector<int>')
+
+    MyContainer<std::vector<int> > vec_container(vec1, vec2);
+
+    vec_container.print(); // COMPILE ERROR: No match for 'operator<<'
+    // (operand types are 'std::ostream' and 'const std::vector<int>')
 
     return 0;
 }
