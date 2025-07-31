@@ -12,16 +12,31 @@ void	swap( T & x, T & y) {
 	return ;
 }
 
-// For built-in types and std::string, < is already defined.
-/* When you use the < (less than) operator with std::string 
-objects in C++, it performs a lexicographical comparison. */
+/**
+ * Compares the two values passed as parameters and returns the smallest one.
+ * If they are equal, it returns the second one.
+ * 
+ * When you use the < (less than) operator with std::string 
+ * objects in C++, it performs a lexicographical comparison.
+ */ 
 template < typename T >
 T const &	min( T const & x, T const & y ) {
-	 if (x < y) {
-        return x;
-    } else {
-        return y;
-    }
+	if (x < y) {
+		return x;
+	} else {
+		return y;
+	}
+}
+
+/* Compares the two values passed as parameters and returns the greatest one.
+If they are equal, it returns the second one. */
+template < typename T >
+T const &	max( T const & x, T const & y ) {
+	if (x > y) {
+		return x;
+	} else {
+		return y;
+	}
 }
 
 #endif
