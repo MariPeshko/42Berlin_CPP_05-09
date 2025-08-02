@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 16:42:47 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/01 20:56:16 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/02 19:06:57 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,12 @@ its argument by const reference or non-const reference,
 depending on the context.
 
 Think carefully about how to support both const 
-and non-const elements in your iter function.*/
+and non-const elements in your iter function.
+
+For an array of int int[] the function becomes: 
+void iter(int* arr, size_t length, void(*f)(const int&))
+
+*/
 template < typename T >
 void	iter( T* arr, size_t length, void (*f)(const T &)) {
 	std::cout << "iter is called, function print() prints each element" << std::endl;
