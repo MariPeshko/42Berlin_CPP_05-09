@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 13:21:59 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/03 14:08:18 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/07 17:54:56 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ template <typename T>
 class Array {
 	
 private:
-	T *_array;
+	T *				_array;
+	unsigned int	_size;
 
 public:
     // Orthodox Canonical Form
@@ -28,7 +29,12 @@ public:
 	~Array();
 	Array(const Array& copy);
 	Array& operator=(const Array& assign);
+
+	// Subscript Operator Overloading
+	T& operator[](const unsigned int &index);
+	const T& operator[](const unsigned int &index) const;
 	
+	const unsigned int	size() const;
 };
 
 // Include the template implementation at the end
