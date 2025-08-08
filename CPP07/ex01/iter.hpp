@@ -6,11 +6,9 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 16:42:47 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/02 19:06:57 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/08 16:05:53 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// Templates must be defined in the header files.
 
 #ifndef	ITER_HPP
 # define ITER_HPP
@@ -23,19 +21,19 @@
  * The func function should also take a const reference.
  */
 
-/**  function template that can be instantiated 
- * with both const and non-const reference parameters. */
+/* function template that can be instantiated 
+ with both const and non-const reference parameters. */
 template < typename T >
 void	print (const T& elem) {
 	std::cout << elem;
 	return ;
 }
 
-/* iter() takes three parameters:
-1) address of an array,
-2) the length of the array,
-3) a function that will be called on every element of the array
+/* increment isn't possible because iter() function has 
+ * void (*f)(const T &) as third parameter. 
+ *  error: increment of read-only reference ‘elem’*/
 
+/*
 Your iter function template must work with any type
 of array. The third parameter can be an instantiated 
 function template. 
@@ -49,24 +47,17 @@ and non-const elements in your iter function.
 
 For an array of int int[] the function becomes: 
 void iter(int* arr, size_t length, void(*f)(const int&))
-
 */
 template < typename T >
 void	iter( T* arr, size_t length, void (*f)(const T &)) {
-	std::cout << "iter is called, function print() prints each element" << std::endl;
+	if (!arr || !f)
+		return ;
 	for (size_t i = 0; i < length; i++) {
 		f(arr[i]);
 		std::cout << " ";
 	}
 	std::cout << std::endl;
 	return ;
-}
-
-template < typename T >
-size_t	sizeArr (const T& arr) {
-
-	size_t s = sizeof(arr) / sizeof(arr[0]);
-	return s;
 }
 
 #endif

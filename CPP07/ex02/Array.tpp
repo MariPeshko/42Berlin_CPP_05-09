@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 13:30:06 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/07 18:05:33 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/08 16:10:50 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ Array<T> &	Array<T>::operator=( Array const &assign ) {
 	}
     return *this;
 }
+
 
 // Destructor
 template <typename T>

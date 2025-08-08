@@ -1,69 +1,70 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_my.cpp                                        :+:      :+:    :+:   */
+/*   main42.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/03 13:22:10 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/07 18:03:40 by mpeshko          ###   ########.fr       */
+/*   Created: 2025/08/07 17:58:41 by mpeshko           #+#    #+#             */
+/*   Updated: 2025/08/08 16:11:24 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Array.hpp"
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
-#define MAX_VAL 75
+#define MAX_VAL 750
 
-int main( void ) {
-	
+int main()
 {
-	// new int() allocates single int, initializes to 0
-	int * a = new int();
-	delete a;
-
-	int * b = new int[5];
-	for (unsigned int i = 0; i < 5; i++) {
-		b[i] = 12;
-	}
-	std::cout << "*b: " << *b << std::endl; 
-
-	delete[] b;
-
-
-	// to specify the template type
-	Array< int > emptyArr;
-	//std::cout << emptyArr ...
-
-	Array< int > arrSize(5);
-	std::cout << "Array arrSize. Default initialization of an element: ";
-	std::cout << arrSize[1] << std::endl;
-	
-	Array< int > cpyArr(arrSize);
-}
-
     Array<int> numbers(MAX_VAL);
-	srand(time(NULL));
+    int* mirror = new int[MAX_VAL];
+    srand(time(NULL));
     for (int i = 0; i < MAX_VAL; i++)
     {
         const int value = rand();
         numbers[i] = value;
+        mirror[i] = value;
     }
-	std::cout << numbers[30] << std::endl;
+    //SCOPE
+    {
+        Array<int> tmp = numbers;
+        Array<int> test(tmp);
+    }
 
-	/* // You can also use other types:
-    Array<std::string> stringArr;
-    Array<double> doubleArr; */
+    for (int i = 0; i < MAX_VAL; i++)
+    {
+        if (mirror[i] != numbers[i])
+        {
+            std::cerr << "didn't save the same value!!" << std::endl;
+            return 1;
+        }
+    }
+    try
+    {
+        numbers[-2] = 0;
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
+    try
+    {
+        numbers[MAX_VAL] = 0;
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
 
-	std::cout << "Size of array numbers: " << numbers.size() << std::endl;
-
-	return 0;
-	
+    for (int i = 0; i < MAX_VAL; i++)
+    {
+        numbers[i] = rand();
+    }
+    delete [] mirror;
+    
+    return 0;
 }
-
-
-/*
-int * b = new int[5]; // default-initialized, not zeroed for built-in types
-std::cout << "*b: " << *b << std::endl; 
-
-Output: *b: -622876016 */

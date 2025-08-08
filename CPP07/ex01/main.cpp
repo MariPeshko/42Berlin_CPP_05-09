@@ -6,13 +6,14 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 16:42:42 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/01 20:56:54 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/08 16:08:49 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "iter.hpp"
 #include <iostream>
 #include <string>
+
 
 using std::string;
 
@@ -27,10 +28,15 @@ int main( void ) {
     // char	arr5[] = {'a', 'b', 'c', 'd', 'e'};
     // float	arr6[] = {1.1f, 2.2f, 3.3f};
 	
-	::iter(arr, sizeArr(arr), ::print);
-	::iter(constArr, sizeArr(constArr), ::print);
-	::iter(strArr, sizeArr(strArr), ::print);
+	::iter(arr, sizeof(arr) / sizeof(arr[0]), ::print);
+	::iter(arr, sizeof(arr) / sizeof(arr[0]), ::print);
+	::iter(constArr, sizeof(constArr) / sizeof(constArr[0]), ::print);
+	::iter(strArr, sizeof(strArr) / sizeof(strArr[0]), ::print);
 	
+	// Null pointer
+	int	*arrnull = nullptr;
+	::iter(arrnull, sizeof(arrnull) / sizeof(arrnull[0]), ::print); 
+
 	return 0;
 	
 }

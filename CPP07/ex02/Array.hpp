@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 13:21:59 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/07 17:54:56 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/08 16:10:48 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define ARRAY_HPP
 
 #include <iostream>
+
 
 template <typename T>
 class Array {
@@ -31,6 +32,9 @@ public:
 	Array& operator=(const Array& assign);
 
 	// Subscript Operator Overloading
+	// When we use a subscript, we must ensure that 
+	// the subscript is in range. 
+	
 	T& operator[](const unsigned int &index);
 	const T& operator[](const unsigned int &index) const;
 	

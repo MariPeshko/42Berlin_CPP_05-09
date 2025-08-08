@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 16:42:52 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/31 16:42:53 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/08 15:41:05 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 #ifndef	WHATEVER_HPP
 # define WHATEVER_HPP
 
+/**
+ * Swaps the values of two given parameters. Does not return anything.
+ * 
+ * @param x,y pass-by-reference
+ */
 template < typename T >
 void	swap( T & x, T & y) {
 
@@ -22,6 +27,7 @@ void	swap( T & x, T & y) {
 	y = x;
 	x = tmp;
 	return ;
+	
 }
 
 /**
@@ -30,6 +36,8 @@ void	swap( T & x, T & y) {
  * 
  * When you use the < (less than) operator with std::string 
  * objects in C++, it performs a lexicographical comparison.
+ * 
+ * @param x,y const references
  */ 
 template < typename T >
 T const &	min( T const & x, T const & y ) {
@@ -40,8 +48,12 @@ T const &	min( T const & x, T const & y ) {
 	}
 }
 
-/* Compares the two values passed as parameters and returns the greatest one.
-If they are equal, it returns the second one. */
+/**
+ * Compares the two values passed as parameters and returns 
+ * the greatest one. If they are equal, it returns the second one.
+ * 
+ * @param x,y const references
+ */
 template < typename T >
 T const &	max( T const & x, T const & y ) {
 	if (x > y) {
