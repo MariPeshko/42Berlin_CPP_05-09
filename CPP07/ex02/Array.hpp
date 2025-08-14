@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 13:21:59 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/08 16:10:48 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/14 12:55:26 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,11 @@ public:
     Array(unsigned int n);
 	~Array();
 	Array(const Array& copy);
-	Array& operator=(const Array& assign);
+	Array&		operator=(const Array& assign);
 
-	// Subscript Operator Overloading
-	// When we use a subscript, we must ensure that 
-	// the subscript is in range. 
-	
-	T& operator[](const unsigned int &index);
-	const T& operator[](const unsigned int &index) const;
+	// Subscript Operator Overloading 
+	T&			operator[](const unsigned int &index);
+	const T&	operator[](const unsigned int &index) const;
 	
 	const unsigned int	size() const;
 };

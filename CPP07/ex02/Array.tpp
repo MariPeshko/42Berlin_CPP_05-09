@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 13:30:06 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/08 16:10:50 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/14 12:56:23 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,21 @@ Array<T> &	Array<T>::operator=( Array const &assign ) {
     return *this;
 }
 
-
 // Destructor
 template <typename T>
 Array<T>::~Array() { 
-    // delete allocated memory
-    delete[] _array;
+
+	delete[] _array;
+	
 };
 
 template <typename T>
 T &	Array<T>::operator[](const unsigned int &index) {
+	
 	if (index >= this->_size)
 		throw std::out_of_range("Array index out of range");
 	return this->_array[index];
+	
 }
 
 /**
@@ -77,9 +79,11 @@ T &	Array<T>::operator[](const unsigned int &index) {
  */
 template <typename T>
 const T & Array<T>::operator[](const unsigned int &index) const {
+
     if (index >= this->_size)
         throw std::out_of_range("Array index out of range");
     return this->_array[index];
+	
 }
 
 /**

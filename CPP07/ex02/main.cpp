@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main42.cpp                                         :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 17:58:41 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/08 16:11:24 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/14 13:01:53 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,28 @@
 
 #define MAX_VAL 750
 
+static void    my_simple_test( void ) {
+
+    // new int() allocates single int, initializes to 0
+	int * a = new int();
+	delete a;
+
+    // new int[number] - creates array with UNINITIALIZED values (garbage)
+    int * b = new int[5];
+	for (unsigned int i = 0; i < 5; i++) {
+		b[i] = 12;
+	}
+	std::cout << "*b: " << *b << std::endl; 
+    delete[] b;
+    
+}
+
 int main()
 {
+
+    //my_simple_test();
+    
+    // 42 test
     Array<int> numbers(MAX_VAL);
     int* mirror = new int[MAX_VAL];
     srand(time(NULL));
