@@ -6,7 +6,13 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:22:15 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/21 19:22:26 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/22 20:17:53 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef SPAN_HPP
+# define SPAN_HPP
+
+
+
+#endif

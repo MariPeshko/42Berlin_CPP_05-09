@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 16:42:52 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/08 15:41:05 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/22 20:26:35 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * @param x,y pass-by-reference
  */
 template < typename T >
-void	swap( T & x, T & y) {
+void	swap( T & x, T & y ) {
 
 	T	tmp = y;
 	y = x;
