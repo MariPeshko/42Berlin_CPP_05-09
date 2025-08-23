@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 13:30:06 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/14 12:56:23 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/23 21:41:55 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ const T & Array<T>::operator[](const unsigned int &index) const {
  * no parameters and must not modify the current instance.
  */
 template <typename T>
-const unsigned int	Array<T>::size( ) const {
+unsigned int	Array<T>::size( ) const {
 
 	return this->_size;
 	

@@ -16,7 +16,7 @@ $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)%.o: %.cpp | $(OBJ_DIR)
-	$(CC) $(FLAGS) $(INC) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 clean:
 	$(RM) -r $(OBJ_DIR)

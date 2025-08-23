@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 16:42:42 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/14 12:53:33 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/23 21:34:18 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int main( void ) {
 	::iter(strArr, sizeof(strArr) / sizeof(strArr[0]), ::print);
 	
 	// Null pointer
-	int	*arrnull = nullptr;
-	::iter(arrnull, sizeof(arrnull) / sizeof(arrnull[0]), ::print); 
+	int	*arrnull = NULL;
+	::iter(arrnull, 0, ::print); 
 
 	return 0;
 	

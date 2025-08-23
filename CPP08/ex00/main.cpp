@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:24:45 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/23 15:59:15 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/23 21:30:37 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,17 @@ int main ()
 	std::cout << "vector.size = " << vector.size() << std::endl;
 	
 	std::vector<int>::iterator it = easyfind(vector, 45);
-	if (it != vector.end()) {
+
+	std::cout << "The value " << 45
+		<< (it == vector.end()
+			? " is not present" : " is present") << std::endl;
+	
+	/* if (it != vector.end()) {
 		std::cout << "Found value: " << *it << std::endl;
 		std::cout << "At position: " << (it - vector.begin()) << std::endl;
 	} else {
 		std::cout << "Value not found!" << std::endl;
-	}
+	} */
 
 	it = easyfind(vector, 1);
 	if (it == vector.end())

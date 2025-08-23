@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 13:21:59 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/14 12:55:26 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/23 21:41:50 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ public:
 	T&			operator[](const unsigned int &index);
 	const T&	operator[](const unsigned int &index) const;
 	
-	const unsigned int	size() const;
+	unsigned int	size() const;
 };
 
 // Include the template implementation at the end

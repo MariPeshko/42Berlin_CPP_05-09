@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 17:58:41 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/14 13:01:53 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/23 21:42:04 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void    my_simple_test( void ) {
 int main()
 {
 
-    //my_simple_test();
+    my_simple_test();
     
     // 42 test
     Array<int> numbers(MAX_VAL);

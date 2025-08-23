@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 18:53:43 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/23 22:01:26 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/23 21:52:32 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,35 +96,23 @@ static void display(Values & values) {
 }
 
 static void	NaNInf(Values &values, const std::string &literal) {
-	
-	if (literal == "nanf" || literal == "+inff" || literal == "-inff") {
-        if (literal == "nanf") {
-            values.f = std::numeric_limits<float>::quiet_NaN();
-        } else if (literal == "+inff") {
-            values.f = std::numeric_limits<float>::infinity();
-        } else if (literal == "-inff") {
-            values.f = -std::numeric_limits<float>::infinity();
-        }
-        values.d = static_cast<double>(values.f);
-    } else if (literal == "nan" || literal == "+inf" || literal == "-inf") {
-        if (literal == "nan") {
-            values.d = std::numeric_limits<double>::quiet_NaN();
-        } else if (literal == "+inf") {
-            values.d = std::numeric_limits<double>::infinity();
-        } else if (literal == "-inf") {
-            values.d = -std::numeric_limits<double>::infinity();
-        }
-        values.f = static_cast<float>(values.d);
-    }
-    
-    if (std::isnan(values.f) || std::isnan(values.d) ||
-        std::isinf(values.f) || std::isinf(values.d)) {
-            std::cout << "char:   impossible" << std::endl;
-            std::cout << "int:    impossible" << std::endl;
-            std::cout << "float:  " << values.f << "f" << std::endl;
-            std::cout << "double: " << values.d << std::endl;
-    }
-	
+	try {
+		if (literal == "nanf" || literal == "+inff" || literal == "-inff") {
+			values.f = std::stof(literal);
+			values.d = static_cast<double>(values.f);
+		} else if (literal == "nan" || literal == "+inf" || literal == "-inf") {
+			values.d = std::stod(literal);
+			values.f = static_cast<float>(values.d);
+		} if (std::isnan(values.f) || std::isnan(values.d) ||
+			std::isinf(values.f) || std::isinf(values.d)) {
+				std::cout << "char:   impossible" << std::endl;
+				std::cout << "int:    impossible" << std::endl;
+				std::cout << "float:  " << values.f << "f" << std::endl;
+				std::cout << "double: " << values.d << std::endl;
+		}
+	} catch (const std::exception& e) {
+		// Conversion failed, continue to next validation check
+	}
 }
 
 static int	isValidChar(std::string const &literal, Values & values) {
