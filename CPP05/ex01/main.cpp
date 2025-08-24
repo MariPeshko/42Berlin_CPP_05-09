@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:14:39 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/10 21:58:37 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 12:48:07 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ void	test_Bur_signForm() {
 
 int	main(void) {
 	
-	//test_basic();
-	//test_Form_beSigned();
+	test_basic();
+	test_Form_beSigned();
 	test_Bur_signForm();
 	std::cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ " << std:: endl << std:: endl;
 	return 0;

@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:14:39 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/13 17:12:07 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 20:07:31 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@
 #include "PresidentialPardonForm.hpp"
 #include <iostream>
 #include <exception>
-#include <chrono>
-#include <thread>
+#include <unistd.h> // for usleep()
 
 static void	test_Buraucrat_executes_sh() {
 		
@@ -104,7 +103,7 @@ int	main(void) {
 	std::cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ " << std:: endl << std:: endl;
 	test_form_is_executed_sh();
 	std::cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ " << std:: endl << std:: endl;
-	//test_Buraucrat_executes_sh();
+	test_Buraucrat_executes_sh();
 	
 	Bureaucrat	TheGreatest(1, "TheGreatest");
 	Bureaucrat	Six(6, "Six");
@@ -113,11 +112,11 @@ int	main(void) {
 	std::cout << buddy;
 	TheGreatest.signForm(buddy);
 	TheGreatest.executeForm(buddy);
-	std::this_thread::sleep_for(std::chrono::milliseconds(1100));
+	usleep(1100000); // 1100 milliseconds = 1,100,000 microseconds
 	TheGreatest.executeForm(buddy);
-	std::this_thread::sleep_for(std::chrono::milliseconds(1100));
+	usleep(1100000);
 	TheGreatest.executeForm(buddy);
-	std::this_thread::sleep_for(std::chrono::milliseconds(1100));
+	usleep(1100000);
 	TheGreatest.executeForm(buddy);
 	
 	std::cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ " << std:: endl << std:: endl;

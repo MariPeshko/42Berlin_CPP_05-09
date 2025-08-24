@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 19:40:36 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/11 19:46:49 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 12:54:25 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class	Bureaucrat {
 		Bureaucrat &	operator=( Bureaucrat const &assign );
 		~Bureaucrat();
 
-		unsigned int		getGrade() const;
+		int					getGrade() const;
 		const std::string&	getName() const;
 		void				upgrade();
 		void				downgrade();
@@ -47,8 +47,8 @@ class	Bureaucrat {
 		};
 
 	private:
-		const std::string	_name;
 		int					_grade;
+		const std::string	_name;
 
 };
 

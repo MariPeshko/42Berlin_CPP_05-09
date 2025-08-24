@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:14:34 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/12 19:38:42 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 12:51:55 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ Bureaucrat::~Bureaucrat() {
 	std::cout << "Destructor of class type Bureaucrat" << std::endl;
 };
 
-unsigned int Bureaucrat::getGrade() const {
+int	Bureaucrat::getGrade() const {
 	return this->_grade;
 }
 

@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:14:42 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/10 20:56:42 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 12:50:30 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ Form::Form( std::string name, int grade, int exgrade ) :
 
 // Copy Constructor
 Form::Form ( Form const & src ) :
-	_formGrade(src.getGrade()), _name(src.getName()), 
-	_formGradeExe(src.getExGrade()), _signed(src.getBoolSigned())	{
+	_name(src.getName()),
+	 _signed(src.getBoolSigned()),
+	_formGrade(src.getGrade()),
+	_formGradeExe(src.getExGrade())	{
 		
 		std::cout << "Copy Constructor of Form class type" << std::endl;
 }
@@ -56,11 +58,11 @@ Form::~Form() {
 	std::cout << "Destructor of class type Form" << std::endl;
 };
 
-unsigned int Form::getGrade() const {
+int Form::getGrade() const {
 	return this->_formGrade;
 }
 
-unsigned int Form::getExGrade() const {
+int Form::getExGrade() const {
 	return this->_formGradeExe;
 }
 

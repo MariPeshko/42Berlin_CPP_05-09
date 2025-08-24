@@ -6,13 +6,14 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 17:30:40 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/21 14:59:49 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 12:39:51 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <ctime>    // for time()
 #include <cstdlib>  // for rand() and srand()
+#include <typeinfo> // for std::bad_cast
 
 class Base
 {
@@ -90,18 +91,21 @@ static void		identify(Base* p) {
 static void	identify(Base& p) {
 	try {
 		A & a = dynamic_cast<A &>(p);
+		(void)a; // Suppress unused variable warning
 		std::cout << "Indentified a reference of a type A" << std::endl;
 		return ;
 	}
 	catch ( std::bad_cast &bc ) { }
 	try {
 		B & b = dynamic_cast<B &>(p);
+		(void)b; // Suppress unused variable warning
 		std::cout << "Indentified a reference of a type B" << std::endl;
 		return ;
 	}
 	catch ( std::bad_cast &bc ) { }
 	try {
-		C & b = dynamic_cast<C &>(p);
+		C & c = dynamic_cast<C &>(p);
+		(void)c; // Suppress unused variable warning
 		std::cout << "Indentified a reference of a type C" << std::endl;
 		return ;
 	}

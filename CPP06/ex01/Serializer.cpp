@@ -6,20 +6,22 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 18:53:31 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/19 19:39:44 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 12:27:03 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Serializer.hpp"
 #include "Data.hpp"
-#include <cstdint>
 
-Serializer::Serializer( void ) {}
+Serializer::Serializer( void ) { }
 
-Serializer::Serializer ( const Serializer & other ) {}
+Serializer::Serializer ( const Serializer & other ) {
+	(void)other;
+}
 
 Serializer & Serializer::operator=( const Serializer &assign) {
-    return *this;
+	(void)assign;
+	return *this;
 }
 
 Serializer::~Serializer( void ) {}
@@ -29,7 +31,7 @@ Serializer::~Serializer( void ) {}
  */
 uintptr_t	Serializer::serialize(Data* ptr) {
 	
-    uintptr_t a = reinterpret_cast<uintptr_t>(ptr);
+	uintptr_t a = reinterpret_cast<uintptr_t>(ptr);
 	return a;
 	
 }

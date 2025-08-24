@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 19:14:34 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/12 19:38:59 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 12:53:36 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ Bureaucrat::~Bureaucrat() {
 	std::cout << "Destructor of class type Bureaucrat" << std::endl;
 };
 
-unsigned int Bureaucrat::getGrade() const {
+int	Bureaucrat::getGrade() const {
 	return this->_grade;
 }
 
@@ -82,6 +82,7 @@ void	Bureaucrat::downgrade() {
 }
 
 void	Bureaucrat::signForm(AForm &f) {
+	
 	if (this->_grade <= f.getGrade()) {
 		std::cout << this->getName() << " signed " << f.getName();
 		std::cout << std::endl;
@@ -96,24 +97,28 @@ void	Bureaucrat::signForm(AForm &f) {
 
 void	Bureaucrat::executeForm(AForm const & form) {
 
-	std::cout << "Buraucrat attempts to execute " << form.getName() << "..." << std:: endl;
+	std::cout << "Buraucrat attempts to execute " << form.getName();
+	std::cout << "..." << std:: endl;
 	std::cout << "Validating signature on the form...\n";
 	if(form.getBoolSigned() == false) {
-		std::cerr << form.getName() << " " << form.getTarget() << " isn't signed." << std::endl;
+		std::cerr << form.getName() << " " << form.getTarget();
+		std::cerr << " isn't signed." << std::endl;
 		return;
 	}
-	std::cout << "Validating grade of the Buraucrat " << this->getName() << "...\n";
+	std::cout << "Validating grade of the Buraucrat " << this->getName();
+	std::cout << "...\n";
 	if(this->getGrade() > form.getExGrade()) {
 		std::cerr << this->getName() << "'s grade is " << this->getGrade();
-		std::cerr << " and it's lower than " << form.getName() << " " << form.getTarget();
-		std::cerr << " requires. It must be equal or higher than " << form.getExGrade() << "." << std::endl;
+		std::cerr << " and it's lower than " << form.getName() << " ";
+		std::cerr << form.getTarget();
+		std::cerr << " requires. It must be equal or higher than ";
+		std::cerr << form.getExGrade() << "." << std::endl;
 		return;
 	}
 	std::cout << this->getName() << " executes " << form.getName() << std::endl;
 	form.action();
-
+	
 }
-
 
 // override the what() method
 // throw() - This is an exception specification (old C++ syntax).
@@ -128,13 +133,3 @@ const char* Bureaucrat::GradeTooHighException::what() const throw() {
 const char* Bureaucrat::GradeTooLowException::what() const throw () {
 	return "_ _ _Bur Exception_ _ _ Grade too low!";
 }
-
-/**
- * Notes
- * 
- * Modern C++ (C++11 and later)
- * Instead of throw(), you should use noexcept:
- * 
- * 'const char* what() const noexcept;'
- * 
- */

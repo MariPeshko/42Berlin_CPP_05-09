@@ -6,15 +6,16 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 18:53:34 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/19 19:42:22 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 12:27:34 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERIALIZER_HPP
 # define SERIALIZER_HPP
 
-#include <cstdint>
 #include "Data.hpp"
+#include <stdint.h> // For uintptr_t
+#include <iostream>
 
 /**
  * Static methods of this class demonstrate that the 

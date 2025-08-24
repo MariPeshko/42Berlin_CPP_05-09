@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 19:37:04 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/12 21:35:15 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 20:15:12 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@ Intern::Intern( void )
 
 // Copy Constructor
 Intern::Intern ( Intern const & src )
-{ 
+{
+	( void )src;
 	std::cout << "Copy Constructor of Intern class type" << std::endl;
 }
 
 // Assignment operator 
 Intern &	Intern::operator=( Intern const &assign ) {
+	( void )assign;
 	std::cout << "Assignment Operator of Intern class type" << std::endl;
 	return *this;
 }
@@ -73,5 +75,5 @@ AForm*	Intern::makeForm(std::string formName, std::string formTarget) {
 	}
 	std::cerr << "There is no " << formName << " form in our bureau.";
 	std::cerr << std::endl;
-	return nullptr;
+	return NULL;
 }

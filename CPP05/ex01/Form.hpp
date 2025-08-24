@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 22:17:35 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/10 22:20:42 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 12:50:40 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ class	Form {
 		Form &	operator=( Form const &assign );
 		~Form();
 
-		unsigned int		getGrade() const;
-		unsigned int		getExGrade() const;
+		int					getGrade() const;
+		int					getExGrade() const;
 		const std::string&	getName() const;
 		const std::string	getSigned() const;
 		bool				getBoolSigned() const;

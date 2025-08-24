@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 16:17:16 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/12 20:08:49 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 12:53:54 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ class	AForm {
 		AForm &	operator=( AForm const &assign );
 		~AForm(); // ? virtual - common practice
 
-		unsigned int		getGrade() const;
-		unsigned int		getExGrade() const;
+		int					getGrade() const;
+		int					getExGrade() const;
 		const std::string&	getName() const;
 		const std::string	getSigned() const;
 		bool				getBoolSigned() const;
