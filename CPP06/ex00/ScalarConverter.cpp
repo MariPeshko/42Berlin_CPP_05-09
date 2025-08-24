@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 18:53:43 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/23 22:01:26 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 11:55:38 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,12 @@ static bool	isValidInt(std::string const &literal) {
 	return true;
 }
 
+/**
+ * Checks if a string ends with 'f' (indicating it might be a float literal).
+ * 
+ * It's used to distinguish between float literals (3.14f) 
+ * and double literals (3.14).
+ */
 static bool	mightBeFloat(std::string const &literal) {
 	if (literal[literal.length() - 1] != 'f')
 		return false;
@@ -75,7 +81,7 @@ static bool	mightBeFloat(std::string const &literal) {
 
 // Output the results
 static void display(Values & values) {
-	std::cout << std::fixed << std::setprecision(1);
+	std::cout << std::fixed << std::setprecision(2);
 	if (values.char_displayable) {
 		if (values.c == ' ')
     		std::cout << "char:   ' '" << std::endl;
@@ -130,7 +136,11 @@ static void	NaNInf(Values &values, const std::string &literal) {
 static int	isValidChar(std::string const &literal, Values & values) {
 	
 	if (isdigit(static_cast<unsigned char>(literal[0]))) {
-		values.i = std::stoi(literal);
+		// C++98 alternative to std::stoi
+		std::istringstream iss(literal);
+		if (!(iss >> values.i) || !iss.eof()) {
+			return 1;
+		}
 		values.char_displayable = false;
 		values.f = static_cast<float>(values.i);
 		values.d = static_cast<double>(values.i);
@@ -149,13 +159,12 @@ static int	isValidChar(std::string const &literal, Values & values) {
 form and output its value in the following series of scalar types */
 // Takes the input from the command line.
 int ScalarConverter::convert(std::string const &literal) {
-    
-	Values values;
 	
+	Values	values;
 	if (literal.empty()) {
-        std::cerr << "Error: Empty input." << std::endl;
-        return 1;
-    }
+		std::cerr << "Error: Empty input." << std::endl;
+		return 1;
+	}
 	else if (literal.length() == 1) {
 		if (isValidChar(literal, values) == 1)
 		{
@@ -170,81 +179,85 @@ int ScalarConverter::convert(std::string const &literal) {
 				NaNInf(values, literal);
 				return 0;
 		} if (isValidInt(literal)) {
+			// values.i = std::stoi(literal);
+			// With C++98 alternative to stoi
+			std::istringstream iss(literal);
 			try {
-				values.i = std::stoi(literal);
+				if (!(iss >> values.i) || !iss.eof()) {
+					std::cerr << "Error: Invalid integer conversion." << std::endl;
+					return 1;
+				}
 				values.f = static_cast<float>(values.i);
 				values.d = static_cast<double>(values.i);
-			}
-			catch (const std::out_of_range &e) {
+				// Check for precision loss in float conversion
+				if (static_cast<int>(values.f) != values.i) {
+					// Float lost precision, but this is standard C++ behavior
+					std::cerr << "Warning: Float lost precision, but this is standard C++ behavior." << std::endl;
+				}
+				if (values.i >= 33 && values.i <= 126) {
+					values.c = static_cast<char>(values.i);
+				} else {
+					values.char_displayable = false;
+				}
+			} catch (const std::out_of_range &e) {
 				std::cerr << "Error: " << literal << " is out of range. what(): " << e.what() << std::endl;
 				return 1;
 			}
-			if (values.i >= 33 && values.i <= 126) {
-				values.c = static_cast<char>(values.i);
-			} else
-				values.char_displayable = false;
-		} else if (mightBeFloat(literal)) {
-			
-			size_t pos = 0;
+		}
+		else if (mightBeFloat(literal)) // Checks if a string ends with 'f'
+		{
+			// C++98 alternative to std::stof //values.f = std::stof(literal, &pos);
+			// The literal.length() - 1 is to remove the 'f' suffix from float literals
+			std::istringstream iss(literal.substr(0, literal.length() - 1));
 			try {
-                values.f = std::stof(literal, &pos);
-                values.d = static_cast<double>(values.f);
+				if (!(iss >> values.f) || !iss.eof())	// !iss.eof() is true if 
+														// there's leftover text after conversion
+				{
+					std::cerr << "Error: Invalid float conversion." << std::endl;
+					return 1;
+				}
+				values.d = static_cast<double>(values.f);
 				if (values.f > static_cast<float>(std::numeric_limits<int>::max()) || 
 					values.f < static_cast<float>(std::numeric_limits<int>::min())) {
 						values.int_displayable = false;
-				} else
-					values.i = static_cast<int>(values.f);
-				if (values.i >= 33 && values.i <= 126) {
-					values.c = static_cast<char>(values.i);
-				} else
-					values.char_displayable = false;
-    		} catch (...) {
-				// invalid_argument or out_of_range
-                std::cerr << "Error: Invalid float conversion." << std::endl;
-                return 1;
-        	}
-			if (pos != (literal.size() - 1))
-			{
-				std::cout << "Invalid float input" << std::endl;
-				return 1;
+					} else {
+						values.i = static_cast<int>(values.f);
+					}
+					if (values.i >= 33 && values.i <= 126) {
+						values.c = static_cast<char>(values.i);
+					} else {
+						values.char_displayable = false;
+					}
+				} catch (...) {
+					std::cerr << "Error: Invalid float conversion." << std::endl;
+					return 1;
+				}
+			} else { // trying a double
+				// C++98 alternative to std::stod // values.d = std::stod(literal, &pos);
+				std::istringstream iss(literal);
+				try {
+					if (!(iss >> values.d) || !iss.eof()) {
+						std::cerr << "Error: Invalid double conversion." << std::endl;
+						return 1;
+					}
+					values.f = static_cast<float>(values.d);
+					if (values.d > static_cast<double>(std::numeric_limits<int>::max()) || 
+						values.d < static_cast<double>(std::numeric_limits<int>::min())) {
+							values.int_displayable = false;
+						} else {
+							values.i = static_cast<int>(values.d);
+						}
+						if (values.i >= 33 && values.i <= 126) {
+							values.c = static_cast<char>(values.i);
+						} else {
+							values.char_displayable = false;
+						}
+					} catch (...) {
+						std::cerr << "Error: Invalid double conversion." << std::endl;
+						return 1;
+					}
+				}
 			}
-			
-		} else { // trying a double
-			
-			size_t pos = 0;
-			try {
-                values.d = std::stod(literal, &pos);
-                values.f = static_cast<float>(values.d);
-				if (values.d > static_cast<double>(std::numeric_limits<int>::max()) || 
-					values.d < static_cast<double>(std::numeric_limits<int>::min())) {
-						values.int_displayable = false;
-				} else
-					values.i = static_cast<int>(values.d);
-
-				if (values.i >= 33 && values.i <= 126) {
-					values.c = static_cast<char>(values.i);
-				} else
-					values.char_displayable = false;
-            } catch (...) {
-				// invalid_argument or out_of_range
-				std::cerr << "Error: Invalid double conversion." << std::endl;
-				return 1;
-            }
-			if (pos != (literal.size()))
-			{
-				std::cout << "Invalid input" << std::endl;
-				return 1;
-			}
-			
-		}
-	}
-	display(values);
-	return 0;
+			display(values);
+			return 0;
 }
-
-/**
- * 
- * isdigit()
- * https://en.cppreference.com/w/cpp/string/byte/isdigit.html
- * 
- */

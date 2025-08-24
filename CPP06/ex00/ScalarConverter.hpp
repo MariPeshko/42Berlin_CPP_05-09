@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 20:01:43 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/07/21 14:29:29 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/24 11:20:53 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>  // For std::istringstream
 
 class	ScalarConverter
 {
