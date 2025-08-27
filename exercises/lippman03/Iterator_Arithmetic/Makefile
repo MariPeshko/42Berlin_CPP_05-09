@@ -1,11 +1,11 @@
-NAME = arrayScores
+NAME = binary_search
 
-SRCS = arrayScores.cc
+SRCS = binary_search.cpp
 OBJ_DIR=obj/
 OBJS=$(SRCS:%.cpp=$(OBJ_DIR)%.o)
 
 CC = c++
-CFLAGS = -Wall -Werror -Wextra -std=c++98
+CFLAGS = -Wall -Werror -Wextra 
 
 all: $(NAME)
 
@@ -16,7 +16,7 @@ $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)%.o: %.cpp | $(OBJ_DIR)
-	$(CC) $(FLAGS) $(INC) -c $< -o $@
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 clean:
 	$(RM) -r $(OBJ_DIR)

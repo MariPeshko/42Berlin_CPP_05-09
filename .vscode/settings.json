@@ -58,6 +58,8 @@
         "cstring": "cpp",
         "cinttypes": "cpp",
         "*.tpp": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "C_Cpp.default.cppStandard": "c++98",
+        "C_Cpp.default.compilerPath": "/usr/bin/c++"
     }
 }

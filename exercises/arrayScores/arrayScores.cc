@@ -20,7 +20,9 @@ int main ()
 	vector<unsigned> grades;
 	// count the number of grades by clusters of ten: 
 	// 0--9, 10--19, . . . 90--99, 100
+
 	unsigned scores[11] = {};  // 11 buckets, all value initialized to 0
+	
 	unsigned grade;
 	while (cin >> grade) {
 		if (grade <= 100)
@@ -30,24 +32,22 @@ int main ()
 	}
 	cout << "grades.size = " << grades.size() << endl;
 
-	for (auto g : grades)  // for every element in grades
-		cout << g << " " ;
-	cout << endl;
+	// C++98 version: replace range-based for loop with iterator
+	for (vector<unsigned>::iterator it = grades.begin(); it != grades.end(); ++it)
+        cout << *it << " ";
+    cout << endl;
+	
+	int cl = 0;
+	// C++98 version: replace range-based for loop with traditional for loop
+	for (size_t i = 0; i < 11; ++i) {
+		if (cl != 100) {
+			cout << "Cluster " << cl << "--" << (cl + 9) << ": ";
+		} else cout << "Cluster " << cl << "   : ";
+        cout << scores[i] << " ";
+		cout << endl;
+		cl += 10;
+	}
 
-	for (auto i : scores)       // for each counter in scores
-		cout << i << " ";       // print the value of that counter
-	cout << endl;
+	return 0;
 }
 
-/**
- * C++ 11
- * cc:33:27: error: range-based ‘for’ loops only available with 
- * ‘-std=c++11’ or ‘-std=gnu++11’
- * for (unsigned g : grades)
- *                   ~~~~~~
- * 
- * cc:37:14: error: ‘auto’ changes meaning in C++11; please remove it 
- * [-Werror=c++11-compat]
-   37 |         for (auto i : scores) 
-                     ~~~~ 
- */
