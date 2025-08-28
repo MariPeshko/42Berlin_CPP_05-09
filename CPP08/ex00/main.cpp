@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:24:45 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/23 21:30:37 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/28 19:29:44 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,18 @@ int main ()
 	vector.push_back(-83);
 	std::cout << "vector.size = " << vector.size() << std::endl;
 	
-	std::vector<int>::iterator it = easyfind(vector, 45);
+	std::vector<int>::const_iterator it = easyfind(vector, 45);
 
 	std::cout << "The value " << 45
 		<< (it == vector.end()
 			? " is not present" : " is present") << std::endl;
 	
-	/* if (it != vector.end()) {
+	if (it != vector.end()) {
 		std::cout << "Found value: " << *it << std::endl;
 		std::cout << "At position: " << (it - vector.begin()) << std::endl;
 	} else {
 		std::cout << "Value not found!" << std::endl;
-	} */
+	}
 
 	it = easyfind(vector, 1);
 	if (it == vector.end())
@@ -64,7 +64,7 @@ int main ()
 	// Note: std::list doesn't support random access, so no position calculation
 	// as we can do for vectors
 	// error: no operator "-" matches these operands
-	std::list<int>::iterator l_it = easyfind(lst, 25);
+	std::list<int>::const_iterator l_it = easyfind(lst, 25);
 	if (l_it != lst.end()) {
 		std::cout << "Found value: " << *l_it << std::endl;
 		// Calculate position manually for list
@@ -86,7 +86,7 @@ int main ()
 	deque.push_back(-25);
 	std::cout << "deque.size = " << deque.size() << std::endl;
 
-	std::deque<int>::iterator d_it = easyfind(deque, 15);
+	std::deque<int>::const_iterator d_it = easyfind(deque, 15);
 	if (d_it != deque.end()) {
 		std::cout << "Found value: " << *d_it << std::endl;
 		std::cout << "At position: " << (d_it - deque.begin()) << std::endl;
@@ -97,7 +97,7 @@ int main ()
 	// TEST 4: EMPTY CONTAINER
 	std::cout << "\nTEST 4: EMPTY CONTAINER" << std::endl;
 	std::vector<int> empty_vec;
-	std::vector<int>::iterator empty_it = easyfind(empty_vec, 42);
+	std::vector<int>::const_iterator empty_it = easyfind(empty_vec, 42);
 	if (empty_it == empty_vec.end())
 		std::cout << "Empty container test passed" << std::endl;
 

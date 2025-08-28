@@ -6,11 +6,12 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:22:28 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/27 19:59:10 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/28 22:11:13 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
+#include <vector>
 #include "Span.hpp"
 
 Span::Span( void ) :  _N(1)

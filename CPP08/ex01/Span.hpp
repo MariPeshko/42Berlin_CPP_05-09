@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:22:15 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/27 19:54:16 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/28 22:14:21 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,16 @@
 class Span {
 	
 private:
-	unsigned int	_N;
+	const unsigned int	_N;
+	std::vector<int> _numbers;
 
 public:
     // Orthodox Canonical Form
     Span();
     Span(unsigned int N);
+	Span(const Span & copy);
+	Span & operator=(const Span & assign);
 	~Span();
-	Span(const Span& copy);
-	Span&		operator=(const Span& assign);
 
     unsigned int		getN() const;
 
