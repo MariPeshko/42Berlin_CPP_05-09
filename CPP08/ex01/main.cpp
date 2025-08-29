@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:22:42 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/29 19:12:37 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/29 19:15:46 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,11 +135,7 @@
 	}
 } */
 
-int	main( void )
-{
-	//test_OCF_addNumber();
-	//test_longestSpan();
-	
+/* static void	test_shortestSpan() {
 	{
 	// Test 7. shortestSpan. less than 2 numbers stored
 	std::cout << "Test 7. shortestSpan. less than 2 numbers stored" << std::endl;
@@ -187,7 +183,23 @@ int	main( void )
 			std::cerr << e.what() << std::endl;
 		}
 	}
+} */
+
+int	main( void )
+{
+	//test_OCF_addNumber();
+	//test_longestSpan();
+	//test_shortestSpan();
 	
+	// test from a subject
+	Span sp = Span(5);
+	sp.addNumber(6);
+	sp.addNumber(3);
+	sp.addNumber(17);
+	sp.addNumber(9);
+	sp.addNumber(11);
+	std::cout << sp.shortestSpan() << std::endl;
+	std::cout << sp.longestSpan() << std::endl;
 	
 	return 0;
 }
