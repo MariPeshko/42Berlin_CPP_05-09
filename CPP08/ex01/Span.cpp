@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:22:28 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/31 13:42:59 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/31 19:52:43 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,21 @@
 #include <algorithm>
 #include <climits>
 
-// Default constructor
-Span::Span( void ) :  _N(1) {
+/**
+ * Default constructor
+ * 
+ * reserve() - a member of vector interface. Pre-allocating memory for 
+ * efficiency without adding elements.
+ */
+Span::Span() :  _N(1) {
 	_numbers.reserve(1);
 }
 
 // Parameterized constructor
 Span::Span( unsigned int N ) : _N(N) {
+	if (N > 1000000) {
+        throw std::invalid_argument("Exception: Span capacity too large");
+    }
 	_numbers.reserve(N);
 };
 
@@ -56,6 +64,8 @@ unsigned int	Span::getN() const {
 }
 
 void	Span::addNumber(int number) {
+	if (_N == 0)
+		throw std::length_error("Exception: Span size capacity is 0");
 	if (_numbers.size() >= _N) {
 		throw std::length_error("Exception: Span is full");
 	}
@@ -76,7 +86,9 @@ unsigned long	Span::longestSpan() const {
 }
 
 /* find out the shortest span (or distance, if you prefer) 
-between all the numbers stored, and return it */
+between all the numbers stored, and return it 
+
+algorithm used: sort() */
 unsigned long	Span::shortestSpan() const {
 	
 	if (this->_numbers.size() < 2)
@@ -85,14 +97,9 @@ unsigned long	Span::shortestSpan() const {
 	std::vector<int> copy = this->_numbers;
 	sort(copy.begin(), copy.end());
 
-	/* for (std::vector<int>::const_iterator it = copy.begin(); 
-			it != copy.end(); ++it)
-				std::cout << *it << " ";
-	std::cout << std::endl; */
-
 	unsigned long shortSpan = ULONG_MAX;
 	for (std::vector<int>::const_iterator it = copy.begin(); 
-		it != copy.end() - 1; ++it)				// Stop before last element
+		it != copy.end() - 1; ++it)		// Stop before last element
 	{
 		unsigned long current_span = static_cast<unsigned long>(*(it + 1)) - 
 									static_cast<unsigned long>(*it);
@@ -104,23 +111,29 @@ unsigned long	Span::shortestSpan() const {
 
 void	Span::print() const {
 	std::cout << "Span object of " << this->getN() << " elements: ";
+	if (_numbers.begin() == _numbers.end())
+		std::cout << "Span doesn't hold numbers";
+	std::cout << _numbers.size() << " numbers in Span" << std::endl;
 	for (std::vector<int>::const_iterator it = _numbers.begin(); 
 			it != _numbers.end(); ++it)
 				std::cout << *it << " ";
 	std::cout << std::endl;
 }
 
+/**
+ * A function to fill your Span with many random numbers 
+ * using a range of iterators.
+ */
 void	Span::addManyNumbers(std::vector<int> & v) {
 	
 	// this->_numbers = v; // copy approach
 
-	// check it later
-/* 	if (_numbers.size() + std::distance(first, last) > _N)
-        throw std::length_error("Not enough space in Span"); */
+	if (v.size() > _N)
+        throw std::length_error("Not enough space in Span");
 	
 	// range of iterators
 	// insert copies all elements into _numbers.
-	//iterator insert(iterator position, InputIterator first, InputIterator last);
+	// iterator insert(iterator position, InputIterator first, InputIterator last);
 	_numbers.clear(); // removes all existing numbers
 	_numbers.insert(_numbers.begin(), v.begin(), v.end());
 	
