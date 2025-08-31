@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 17:58:41 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/23 21:42:04 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:13:16 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+
 
 #define MAX_VAL 750
 

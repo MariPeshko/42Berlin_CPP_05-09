@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:22:15 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/29 19:00:47 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:02:23 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ public:
 	unsigned long	longestSpan() const;
 	unsigned long	shortestSpan() const;
 	void			print() const;
+	void			addManyNumbers(std::vector<int> & v);
 	
 };
 

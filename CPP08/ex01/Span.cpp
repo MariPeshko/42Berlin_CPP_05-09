@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:22:28 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/29 19:10:33 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:42:59 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ unsigned long	Span::shortestSpan() const {
 	return shortSpan;
 }
 
-
 void	Span::print() const {
 	std::cout << "Span object of " << this->getN() << " elements: ";
 	for (std::vector<int>::const_iterator it = _numbers.begin(); 
@@ -110,6 +109,31 @@ void	Span::print() const {
 				std::cout << *it << " ";
 	std::cout << std::endl;
 }
+
+void	Span::addManyNumbers(std::vector<int> & v) {
+	
+	// this->_numbers = v; // copy approach
+
+	// check it later
+/* 	if (_numbers.size() + std::distance(first, last) > _N)
+        throw std::length_error("Not enough space in Span"); */
+	
+	// range of iterators
+	// insert copies all elements into _numbers.
+	//iterator insert(iterator position, InputIterator first, InputIterator last);
+	_numbers.clear(); // removes all existing numbers
+	_numbers.insert(_numbers.begin(), v.begin(), v.end());
+	
+	return ;
+}
+
+/* // version 2
+void Span::addManyNumbers(const std::vector<int>& v) {
+    if (v.size() > _N)
+        throw std::length_error("Too many numbers for Span");
+
+    _numbers.assign(v.begin(), v.end());
+} */
 
 std::ostream &	operator<<(std::ostream &o, Span const &i) {
 

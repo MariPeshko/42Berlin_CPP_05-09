@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:22:42 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/29 19:15:46 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/08/31 13:35:07 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include <iostream>
 #include <vector>
 #include <exception>
-#include <stdexcept>
 #include <climits>
+#include <cstdlib> // srand
+#include <ctime> // time
 
 // test OCF and addNumber()
 /* static void	test_OCF_addNumber( ) {
@@ -191,15 +192,39 @@ int	main( void )
 	//test_longestSpan();
 	//test_shortestSpan();
 	
-	// test from a subject
-	Span sp = Span(5);
-	sp.addNumber(6);
-	sp.addNumber(3);
-	sp.addNumber(17);
-	sp.addNumber(9);
-	sp.addNumber(11);
-	std::cout << sp.shortestSpan() << std::endl;
-	std::cout << sp.longestSpan() << std::endl;
+	{
+		// test from a subject
+		Span sp = Span(5);
+		sp.addNumber(6);
+		sp.addNumber(3);
+		sp.addNumber(17);
+		sp.addNumber(9);
+		sp.addNumber(11);
+		std::cout << sp.shortestSpan() << std::endl;
+		std::cout << sp.longestSpan() << std::endl;
+	}
+
+	// test Many numbers
+	Span sp = Span(15000);
+
+	std::vector<int> toFill(15000); // 15000 elements, each initialized to 0
+	srand(time(NULL));
+	for(std::vector<int>::iterator it = toFill.begin(); it != toFill.end(); ++it) {
+		
+		// int value = rand() % 30001 - 15000; // Option 2
+
+		int value = rand() % 15001; // Range: 0 to 15000 (inclusive)
+		if (rand() % 2 == 0) {		// 50% chance
+			value = -value;			// Make it negative
+		}
+		*it = value;
+	}
+	
+	sp.addManyNumbers(toFill);
+	sp.print();
+
+	std::cout << "shortest : " << sp.shortestSpan() << std::endl;
+	std::cout << "longest : "<< sp.longestSpan() << std::endl;
 	
 	return 0;
 }
