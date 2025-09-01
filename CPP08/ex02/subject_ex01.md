@@ -8,8 +8,7 @@ To repair this injustice, you have to make the std::stack container iterable.
 
 Write a MutantStack class. It will be implemented in terms of a std::stack. It will offer all its member functions, plus an additional feature: iterators.
 
-Of course, you will write and turn in your own tests to ensure everything works as
-expected.
+Of course, you will write and turn in your own tests to ensure everything works as expected.
 
 Find a test example below.
 
