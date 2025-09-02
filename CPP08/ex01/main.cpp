@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:22:42 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/31 19:56:35 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/09/02 11:52:26 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@
 
 // test OCF and addNumber()
 static void	test_OCF_addNumber( ) {
+
+	std::string divider(60, '-');
 	// Test 1. Default Constructor
+	std::cout << "\n" << divider << std::endl;
 	std::cout << "Test 1. Default Constructor" << std::endl;
 	
 	Span def;
@@ -33,61 +36,60 @@ static void	test_OCF_addNumber( ) {
 	}
 	def.print();
 
-	// Test 2. Parametric COnstructor
-	std::cout << "\nTest 2. Default COnstructor" << std::endl;
+	// Test 2. Parametric Constructor
+	std::cout << "\n" << divider << std::endl;
+	std::cout << "\nTest 2. Parametric Constructor" << std::endl;
 
-	Span test(5);
-	std::cout << test;
-	test.addNumber(1);
-	test.addNumber(2);
-	test.addNumber(3);
-	test.addNumber(4);
-	test.addNumber(5);
+	Span param(5);
+	std::cout << param;
 	try {
-		test.addNumber(6);
+		param.addNumber(1);
+		param.addNumber(2);
+		param.addNumber(3);
+		param.addNumber(4);
+		param.addNumber(5);
+		param.addNumber(6);
 	} catch (std::exception & e) {
 		std::cout << e.what() << std::endl;
 	}
-	test.print();
+	param.print();
 
 	// Test 3. Assignment operator
+	std::cout << "\n" << divider << std::endl;
 	std::cout << "\nTest 3. Assignment operator" << std::endl;
-	try {
-		def = test;
-	} catch (std::exception & e) {
-		std::cout << e.what() << std::endl;
-	}
-
-	try {
-		test = def;
-	} catch (std::exception & e) {
-		std::cout << e.what() << std::endl;
-	}
-
-	test.print();
+	//std::cout << "Size of def Span is " << def.getN() << std::endl;
+	//std::cout << "Size of param Span is " << param.getN() << std::endl;
+	std::cout << "Def Span: ";
 	def.print();
-
-	// Additional test. Span size is 0
-	/* {
-		Span sp = Span(0);
-		try {
-			sp.addNumber(6);
-		} catch (std::exception & e) {
-			std::cout << e.what() << std::endl;
-		}
-	} */
-
-	// Additional test. Negative argument. Span capacity too large
-	/* try {
-		Span sp = Span(-1);
+	std::cout << "Param Span: ";
+	param.print();
+	std::cout << "\nAssigning the object with a bigger size to the ";
+	std::cout << "smaller" << std::endl;
+	try {
+		def = param;
 	} catch (std::exception & e) {
 		std::cout << e.what() << std::endl;
-	} */
+	}
+	std::cout << "\nAssigning the object with a smaller size to the ";
+	std::cout << "bigger" << std::endl;
+	try {
+		param = def;
+	} catch (std::exception & e) {
+		std::cout << e.what() << std::endl;
+	}
+	std::cout << "\nDef Span: ";
+	def.print();
+	std::cout << "Param Span: ";
+	param.print();
+	std::cout << "\n" << divider << std::endl;
 }
 
 static void	test_longestSpan() {
+	
+	std::string divider(60, '-');
 	{
 		// Test 4. longestSpan. less than 2 numbers stored
+		std::cout << "\n" << divider << std::endl;
 		std::cout << "\nTest 4. longestSpan. less than 2 numbers stored" << std::endl;
 		Span def;
 		std::cout << def;
@@ -103,6 +105,7 @@ static void	test_longestSpan() {
 
 	{
 		// Test 5. longestSpan. more than 2 numbers stored
+		std::cout << "\n" << divider << std::endl;
 		std::cout << "\nTest 5. longestSpan. enough numbers stored" << std::endl;
 		Span test(5);
 		std::cout << test;
@@ -121,6 +124,7 @@ static void	test_longestSpan() {
 	}
 	{
 		// Test 6. longestSpan. numbers are equal
+		std::cout << "\n" << divider << std::endl;
 		std::cout << "\nTest 6. longestSpan. numbers are equal" << std::endl;
 		Span test(5);
 		std::cout << test;
@@ -139,6 +143,7 @@ static void	test_longestSpan() {
 
 	{
 		// Test 6A. longestSpan.
+		std::cout << "\n" << divider << std::endl;
 		std::cout << "\nTest 6A. longestSpan. huge span" << std::endl;
 		Span test(2);
 		std::cout << test;
@@ -150,11 +155,14 @@ static void	test_longestSpan() {
 		} catch (std::exception & e) {
 			std::cerr << e.what() << std::endl;
 		}
+		std::cout << "\n" << divider << std::endl;
 	}
 }
 
 static void	test_shortestSpan() {
+	std::string divider(60, '-');
 	{
+		std::cout << "\n" << divider << std::endl;
 		// Test 7. shortestSpan. less than 2 numbers stored
 		std::cout << "\nTest 7. shortestSpan. less than 2 numbers stored" << std::endl;
 		Span def;
@@ -169,6 +177,7 @@ static void	test_shortestSpan() {
 		}
 	}
 	{
+		std::cout << "\n" << divider << std::endl;
 		// Test 8. shortestSpan. more than 2 numbers stored
 		std::cout << "\nTest 8. shortestSpan. enough numbers stored" << std::endl;
 		Span test(5);
@@ -187,6 +196,7 @@ static void	test_shortestSpan() {
 	}
 
 	{
+		std::cout << "\n" << divider << std::endl;
 		// Test 9. shortestSpan. int max and int min
 		std::cout << "\nTest 9. shortestSpan. int max and int min" << std::endl;
 		Span test(5);
@@ -200,6 +210,7 @@ static void	test_shortestSpan() {
 			std::cerr << e.what() << std::endl;
 		}
 	}
+	std::cout << "\n" << divider << std::endl;
 }
 
 /**
@@ -212,8 +223,10 @@ static void	test_shortestSpan() {
  * 
  */
 static void	testMultiNUmbers() {
+	std::string divider(60, '-');
+	std::cout << "\n" << divider << std::endl;
 	// Test 10. test multiple numbers
-	std::cout << "\nTest 10. test multiple numbers\n";
+	std::cout << "\nTest 10. Multiple numbers\n";
 	std::cout << "To test exception: make a toFill vector bigger" << std::endl;
 
 	Span sp = Span(15000);
@@ -235,6 +248,7 @@ static void	testMultiNUmbers() {
 	} catch (std::exception & e) {
 		std::cerr << e.what() << std::endl;
 	}
+	//sp.print(); // uncomment to see the numbers in output
 
 	try {
 		std::cout << "shortest : " << sp.shortestSpan() << std::endl;
@@ -247,14 +261,18 @@ static void	testMultiNUmbers() {
 	} catch (std::exception & e) {
 		std::cerr << e.what() << std::endl;
 	}
+	
+	std::cout << "\n" << divider << std::endl;
+	
 }
 
 int	main( void )
 {
-
+	std::string divider(60, '-');
+	std::cout << "\n" << divider << std::endl;
 	// Test 10. From a subject
 	{
-		std::cout << "\nTest. From a subject\n";
+		std::cout << "\nTest from a subject\n";
 		Span sp = Span(5);
 		sp.addNumber(6);
 		sp.addNumber(3);
@@ -262,7 +280,7 @@ int	main( void )
 		sp.addNumber(9);
 		sp.addNumber(11);
 		std::cout << sp.shortestSpan() << std::endl;
-		std::cout << sp.longestSpan() << "\n" << std::endl;
+		std::cout << sp.longestSpan() << std::endl;
 	}
 	
 	test_OCF_addNumber();
@@ -270,7 +288,27 @@ int	main( void )
 	test_shortestSpan();
 	testMultiNUmbers();
 
-	
-	
+	// Additional test. Span size is 0
+	std::cout << "\nAdditional test. Span size is 0" << std::endl;
+	{
+		Span sp = Span(0);
+		try {
+			sp.addNumber(6);
+		} catch (std::exception & e) {
+			std::cout << e.what() << std::endl;
+		}
+	}
+	std::cout << "\n" << divider << std::endl;
+	// Additional test. Negative argument. Span capacity too large
+	{
+		std::cout << "\nAdditional test. Negative argument." << std::endl;
+		try {
+			Span sp = Span(-1);
+		} catch (std::exception & e) {
+			std::cout << e.what() << std::endl;
+		}
+	}
+	std::cout << "\n" << divider << std::endl;
+
 	return 0;
 }

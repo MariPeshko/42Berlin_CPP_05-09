@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 19:22:28 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/08/31 19:52:43 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/09/02 11:42:54 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ Span::Span ( Span const & src ) :
 // Capacity check to maintain class consistency.
 Span &	Span::operator=( Span const &assign ) {
 
-	std::cout << "Assignment operator" << std::endl;
+	std::cout << "Assignment operator is called" << std::endl;
 	if (this != &assign) {
 		if (this->_N < assign._numbers.size()) {
-			throw std::runtime_error("Cannot assign: not enough capacity");
+			throw std::runtime_error("Exception. Cannot assign: not enough capacity");
 		}
 		this->_numbers = assign._numbers;
 	}
@@ -58,10 +58,6 @@ Span &	Span::operator=( Span const &assign ) {
 }
 
 Span::~Span() { };
-
-unsigned int	Span::getN() const {
-	return this->_N;
-}
 
 void	Span::addNumber(int number) {
 	if (_N == 0)
@@ -74,7 +70,10 @@ void	Span::addNumber(int number) {
 
 /* find out the longest span (or distance, if you prefer) 
 between all the numbers stored, and return it.
-It works for INT_MAX and INT_MIN */
+
+I used casting here to prevent integer overflow when dealing with 
+extreme values like INT_MAX and INT_MIN.
+*/
 unsigned long	Span::longestSpan() const {
 
 	if (this->_numbers.size() < 2)
@@ -109,11 +108,17 @@ unsigned long	Span::shortestSpan() const {
 	return shortSpan;
 }
 
+unsigned int	Span::getN() const {
+	return this->_N;
+}
+
 void	Span::print() const {
 	std::cout << "Span object of " << this->getN() << " elements: ";
 	if (_numbers.begin() == _numbers.end())
 		std::cout << "Span doesn't hold numbers";
 	std::cout << _numbers.size() << " numbers in Span" << std::endl;
+	if (_numbers.size() != 0)
+		std::cout << "List of numbers: ";
 	for (std::vector<int>::const_iterator it = _numbers.begin(); 
 			it != _numbers.end(); ++it)
 				std::cout << *it << " ";
@@ -123,35 +128,25 @@ void	Span::print() const {
 /**
  * A function to fill your Span with many random numbers 
  * using a range of iterators.
+ * So we can't use a copy approach: this->_numbers = v;
+ * 
+ * Here I used insert(), but the other option is assign()
+ * _numbers.assign(v.begin(), v.end());
  */
 void	Span::addManyNumbers(std::vector<int> & v) {
 	
-	// this->_numbers = v; // copy approach
-
 	if (v.size() > _N)
-        throw std::length_error("Not enough space in Span");
-	
-	// range of iterators
-	// insert copies all elements into _numbers.
-	// iterator insert(iterator position, InputIterator first, InputIterator last);
+		throw std::length_error("Not enough space in Span");
 	_numbers.clear(); // removes all existing numbers
 	_numbers.insert(_numbers.begin(), v.begin(), v.end());
 	
 	return ;
 }
 
-/* // version 2
-void Span::addManyNumbers(const std::vector<int>& v) {
-    if (v.size() > _N)
-        throw std::length_error("Too many numbers for Span");
-
-    _numbers.assign(v.begin(), v.end());
-} */
-
 std::ostream &	operator<<(std::ostream &o, Span const &i) {
-
-    o << "Span object of " << i.getN() << " maximum elements.";
+	
+	o << "Span object of " << i.getN() << " maximum elements.";
 	o << std::endl;
-    return o;
+	return o;
 
 }
