@@ -1,6 +1,6 @@
-NAME = easyfind
+NAME = btc
 
-SRCS = main.cpp
+SRCS = main.cpp BitcoinExchange.cpp
 OBJ_DIR=obj/
 OBJS=$(SRCS:%.cpp=$(OBJ_DIR)%.o)
 
