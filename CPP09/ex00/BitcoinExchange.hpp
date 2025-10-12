@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 18:29:59 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/09 18:23:00 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/10/12 13:09:06 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,24 @@
 class BitcoinExchange {
 private:
     std::map<std::string, double> _database;  // date -> exchange_rate
-	bool loadDatabase(const std::string& filename);
-    bool isValidDate(const std::string& date) const;
-    //bool isValidValue(double value) const;
-    std::string findClosestDate(const std::string& date) const;
-	double CalcAmount(const std::string & date, double value);
+	bool	loadDatabase(const std::string& filename);
+    bool	isValidDate(const std::string& date) const;
+	bool	isValidValue(const std::string& value_str) const;
+    bool	isValidValue(double value) const;
+    double	findClosestRate(const std::string& date) const;
+	double	CalcAmount(const std::string & date, double value) const;
     
 public:
 	BitcoinExchange();
 	~BitcoinExchange();
 	BitcoinExchange(const BitcoinExchange& copy);
 	BitcoinExchange& operator=(const BitcoinExchange& assign);
-
-    std::map<std::string, double> getBase() const;
-    std::map<std::string, double> & getBase();
+	
+	const std::map<std::string, double>& getBase() const;
+	std::map<std::string, double>& getBase();
 	
 	bool processInputFile(const std::string& filename);
-	//void processLine(const std::string& line);
+	void processLine(const std::string& line);
 };
 
 #endif
