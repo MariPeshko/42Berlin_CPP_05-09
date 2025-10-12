@@ -1,6 +1,6 @@
-NAME = easyfind
+NAME = RPN
 
-SRCS = main.cpp
+SRCS = main.cpp RPN.cpp
 OBJ_DIR=obj/
 OBJS=$(SRCS:%.cpp=$(OBJ_DIR)%.o)
 
