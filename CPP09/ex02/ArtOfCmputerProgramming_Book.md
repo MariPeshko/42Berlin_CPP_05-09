@@ -1,0 +1,53 @@
+page 184
+
+5.3.1. Minimum-Comparison Sorting
+
+Merge insertion.
+
+A pleasant generalization of the method above has been discovered by Lester Ford, Jr. and Selmer Johnson. Since it involves some aspects of merging and some aspects of insertion, we shall call it merge insertion. For example, consider the problem of sorting 21 elements. We start by comparing the ten pairs K 1 : K 2, K3: K4, ... , K19: K2o; then we sort the ten larger elements of the pairs, using merge insertion. As a result we obtain the configuration analogous to (5)·
+
+Picture 7.
+
+The next step is to insert b3 among {b1 , a1, a2}, then b2 among the other elements less than a2; we arrive at the configuration:
+
+Picture 8.
+
+Let us call the upper-line elements the main chain. We can insert b5 into its proper place in the main chain, using three comparisons (first comparing it to c4, then c 2 or c 6 , etc.); then b4 can be moved into the main chain in three more steps, leading to:
+
+Picture 9.
+
+The next step is crucial; is it clear what to do? We insert bu (not b7 ) into the main chain, using only four comparisons. Then b10 , b9 , b8 , b7 , b6 (in this order)
+can also be inserted into their proper places in the main chain, using at most four comparisons each.
+
+A careful count of the comparisons involved here shows that the 21 elements have been sorted in at most 10+ S(lO) + 2 + 2 + 3 + 3 +4+ 4+4 +4+ 4+4 = 66 steps.
+
+Since
+
+2 to the power of 65 < 21! < 2 to the power of 66,
+
+we also know that no fewer than 66 would be possible in any event; hence
+
+S(21) = 66.
+
+(Binary insertion would have required 74 comparisons.)
+
+In general, merge insertion proceeds as follows for n elements:
+i) Make pairwise comparisons of [n/2] disjoint pairs of elements. (If n is odd, leave one element out.)
+ii) Sort the [n/2] larger numbers, found in step (i), by merge insertion.
+iii) Name the elements a1, a2, ... , a[n/2], b1, b2, ... , b[n/2] as in (Picture 7), where a1 <= a2 ... <=> a[n/2] and bi <= i for 1 <= i <= [n/2]; call b1 and the a's the "main chain.Insert the remaining b's into the main chain, using binary
+insertion, in the following order, leaving out all bj for j > [n/2]:
+
+Picture 11:
+b3,b2; b5,b4; b11,b10,...,b6; ...; btk,btk-1, ... ,btk-1+1; ....
+
+We wish to define the sequence (t1, t2, t3, t4, ... ) = (1, 3, 5, 11, ... ), which appears in (11), in such a way that each of btk1  btk-1, ... , btk-1+1 can be inserted into the main chain with at most k comparisons. Generalizing (7), (8), and (g), we obtain the diagram:
+
+(diagram)
+
+where the main chain up to and including atk-1 contains 2tk-1 + (tk - tk-1 - 1) elements.
+This number must be less than 2 to the power of k; our best bet is to set it equal to 2k - 1, so that:
+
+Picture 12.
+tk-1 + tk = 2 to the power of k.
+
+(Continuation.)

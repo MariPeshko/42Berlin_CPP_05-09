@@ -1,6 +1,6 @@
-NAME = easyfind
+NAME = PmergeMe
 
-SRCS = main.cpp
+SRCS = main.cpp PmergeMe.cpp
 OBJ_DIR=obj/
 OBJS=$(SRCS:%.cpp=$(OBJ_DIR)%.o)
 
