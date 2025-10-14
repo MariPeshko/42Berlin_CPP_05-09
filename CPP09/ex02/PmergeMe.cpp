@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:13 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/14 16:57:25 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/10/14 19:21:57 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@
 #include <set>
 
 PmergeMe::PmergeMe(const std::vector<int> & parsed_numbers)
-	: _numbers(parsed_numbers) {}
+	: _numbers(parsed_numbers) {
+		_size = _numbers.size();
+	}
 
 PmergeMe::~PmergeMe() {}
 
@@ -43,15 +45,35 @@ void PmergeMe::sort() {
 
 void PmergeMe::display() {
 	std::cout << "Before: ";
-	for (std::vector<int>::const_iterator it = _numbers.begin();
+	if (_size <= 5) {
+		for (std::vector<int>::const_iterator it = _numbers.begin();
 		it != _numbers.end(); ++it)
 			std::cout << *it << " ";
+	}
+	else {
+		std::vector<int>::const_iterator it = _numbers.begin();
+		for (int i = 0; i < 4; i++) {
+			std::cout << *it << " ";
+			++it;
+		}
+		std::cout << "[...]";
+	}
 	std::cout << std::endl;
-
-	std::cout << "After: ";
-	for (std::vector<int>::const_iterator it = _sorted_numbers.begin();
+	std::cout << "After:  ";
+	if (_size <= 5) {
+		for (std::vector<int>::const_iterator it = _sorted_numbers.begin();
 		it != _sorted_numbers.end(); ++it)
 			std::cout << *it << " ";
+	} else {
+		std::vector<int>::const_iterator it = _sorted_numbers.begin();
+		for (int i = 0; i < 4; i++, it++) {
+			std::cout << *it << " ";
+		}
+		std::cout << "[...]";
+	}
+	/// to print last sorted elements (even for a list)
+	// std::advance(it, size - 10);  
+	
 	std::cout << std::endl;
 }
 

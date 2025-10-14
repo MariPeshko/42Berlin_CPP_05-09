@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:19 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/14 16:56:23 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/10/14 19:04:47 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 
 class PmergeMe {
 	private:
-		std::vector<int> _numbers;
-		std::vector<int> _sorted_numbers;
+		std::vector<int>	_numbers;
+		std::vector<int>	_sorted_numbers;
+		int					_size;
 
 		// Core algorithm functions
 		// void fordJohnsonSort(std::vector<int>& vec);
