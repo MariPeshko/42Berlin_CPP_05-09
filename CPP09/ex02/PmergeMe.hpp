@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:19 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/14 19:04:47 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/10/27 18:21:06 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ class PmergeMe {
 		PmergeMe(const PmergeMe& copy);
 		PmergeMe& operator=(const PmergeMe& assign);
 		
-		void sort();
+		void sort(std::vector<int>& vec);
     	void display();
 
 		static bool	isValidInput(const std::string & input);

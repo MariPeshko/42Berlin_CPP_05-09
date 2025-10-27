@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:13 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/14 19:21:57 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/10/27 18:35:10 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,70 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& assign) {
 	return *this;
 }
 
-void PmergeMe::sort() {
-	this->_sorted_numbers = this->_numbers;
+static void display_vector(const std::vector<int> & vct) {
+	for (std::vector<int>::const_iterator it = vct.begin();
+		it != vct.end(); ++it)
+			std::cout << *it << " ";
+}
+
+void PmergeMe::sort(std::vector<int>& vec) {
+	_sorted_numbers = _numbers;
+	// Base case
+	if (vec.size() <= 1) {
+		return;
+	}
+	if (vec.size() == 2) {
+		if (vec[0] > vec[1]) {
+			std::swap(vec[0], vec[1]);
+		}
+		return;
+	}
+	
+	// Step 1: Create pairs. a and b parts
+	bool odd = false;
+	std::vector<int> larg;	// a's in Knuth's notation
+	std::vector<int> small;	// b's in Knuth's notation
+	int unpaired_element = 0;
+	int size = vec.size();
+	
+	if (size % 2 != 0) {
+		odd = true;
+		unpaired_element = vec.back();
+	}
+	
+	for (std::vector<int>::const_iterator it = vec.begin();
+		it != vec.end(); ) {
+			if ((it + 1) == vec.end())
+				break ;
+			if (*it > *(it + 1) || *it == *(it + 1)) {
+				larg.push_back(*it);
+				small.push_back(*(it + 1));
+			} else {
+				larg.push_back(*(it + 1));
+				small.push_back(*it);
+			}
+			++it;
+			if (it != vec.end()) {
+            	++it;
+        	}
+		}
+		
+		// Step 2: RECURSIVELY sort larger elements using Ford-Johnson
+		sort(larg);
+		
+		std::cout << "small: ";
+		display_vector(small);
+		std::cout << "large: ";
+		display_vector(larg);
+		if (odd == true) {
+			std::cout << "unpaired_element: " << unpaired_element;
+			
+		}
+		std::cout << std::endl;
+
+		// Step 3: Build main chain
+		// Step 4: Insert remaining elements using Jacobsthal sequence
+		_sorted_numbers = _numbers;
 }
 
 void PmergeMe::display() {

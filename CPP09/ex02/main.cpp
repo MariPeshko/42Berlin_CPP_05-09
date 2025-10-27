@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:52:18 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/14 16:54:46 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/10/27 18:28:00 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <string>
 #include <vector>
 
-
+// ./PmergeMe 5 7 6 8 9 10 1 4 2 3
 
 int main(int argc, char **argv) {
 	
@@ -33,11 +33,11 @@ int main(int argc, char **argv) {
 		if (!PmergeMe::parseString(input, numbers))
 			return 1;
 	}
-	if (PmergeMe::isDuplicates(numbers))
+	if (PmergeMe::isDuplicates(numbers)) // probably will be removed
 		return 1;
 	
 	PmergeMe	SortObj(numbers);
-	SortObj.sort();
+	SortObj.sort(numbers);
 	SortObj.display();
 
 	return 0;

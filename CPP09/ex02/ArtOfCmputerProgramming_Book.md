@@ -4,9 +4,13 @@ page 184
 
 Merge insertion.
 
-A pleasant generalization of the method above has been discovered by Lester Ford, Jr. and Selmer Johnson. Since it involves some aspects of merging and some aspects of insertion, we shall call it merge insertion. For example, consider the problem of sorting 21 elements. We start by comparing the ten pairs K 1 : K 2, K3: K4, ... , K19: K2o; then we sort the ten larger elements of the pairs, using merge insertion. As a result we obtain the configuration analogous to (5)·
+A pleasant generalization of the method above has been discovered by Lester Ford, Jr. and Selmer Johnson. Since it involves some aspects of merging and some aspects of insertion, we shall call it merge insertion. For example, consider the problem of sorting 21 elements. We start by comparing the ten pairs K1 : K2, K3: K4, ... , K19: K20; then we sort the ten larger elements of the pairs, using merge insertion. As a result we obtain the configuration analogous to (5)·
 
 Picture 7.
+
+Main chain (sorted a's):  a1 → a2 → a3 → a4 → a5 → ...
+                          ↑    ↑    ↑    ↑    ↑
+Smaller elements (b's):   b1   b2   b3   b4   b5   ...
 
 The next step is to insert b3 among {b1 , a1, a2}, then b2 among the other elements less than a2; we arrive at the configuration:
 
