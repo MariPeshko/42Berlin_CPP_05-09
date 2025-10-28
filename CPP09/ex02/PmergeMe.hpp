@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:19 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/27 18:21:06 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/10/28 13:47:08 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,18 @@
 /* #include <sstream>
 #include <stdexcept> */
 
+struct Pair {
+    int smaller;
+    int larger;
+};
+
 class PmergeMe {
 	private:
 		std::vector<int>	_numbers;
 		std::vector<int>	_sorted_numbers;
 		int					_size;
+
+		void insertInSortedVector(std::vector<int>& vec, int value);
 
 		// Core algorithm functions
 		// void fordJohnsonSort(std::vector<int>& vec);
@@ -41,6 +48,9 @@ class PmergeMe {
 		PmergeMe& operator=(const PmergeMe& assign);
 		
 		void sort(std::vector<int>& vec);
+		void sortPairs(std::vector<Pair>& pairs, int unpaired, bool has_unpaired);
+		void buildSortedVector(std::vector<int>& vec, std::vector<Pair>& pairs, 
+			int unpaired_element, bool has_unpaired);
     	void display();
 
 		static bool	isValidInput(const std::string & input);

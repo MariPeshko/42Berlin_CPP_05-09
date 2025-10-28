@@ -12,6 +12,32 @@ Main chain (sorted a's):  a1 → a2 → a3 → a4 → a5 → ...
                           ↑    ↑    ↑    ↑    ↑
 Smaller elements (b's):   b1   b2   b3   b4   b5   ...
 
+-----
+Перший виклик
+sort([5, 7, 6, 8, 9, 10, 1, 4, 2, 3])  // 10 елементів
+├─ Створює пари: (5,7), (6,8), (9,10), (1,4), (2,3)
+└─ merge_sort(pairs) // 5 пар
+   ├─ Витягує larger: [7, 8, 10, 4, 3]
+   └─ sort([7, 8, 10, 4, 3])  // Рекурсивний виклик
+
+Другий виклик
+sort([7, 8, 10, 4, 3])  // 5 елементів
+├─ Створює пари: (7,8), (10,4)→(4,10), unpaired=3
+└─ merge_sort(pairs) // 2 пари
+   ├─ Витягує larger: [8, 10]
+   └─ sort([8, 10])  // Рекурсивний виклик
+
+Третій виклик
+sort([8, 10])  // 2 елементи
+└─ Base case: [8, 10] (вже відсортовано)
+-----
+
+Main chain (a's):     [3,  4,  7,  8,  10]  ← Відсортовані larger елементи
+Smaller elements(b's): [2,  1,  5,  6,  9]   ← Відповідні smaller елементи
+                       ↑   ↑   ↑   ↑   ↑
+Співвідношення:       b1≤a1 b2≤a2 b3≤a3 b4≤a4 b5≤a5 ✓
+______
+
 The next step is to insert b3 among {b1 , a1, a2}, then b2 among the other elements less than a2; we arrive at the configuration:
 
 Picture 8.
