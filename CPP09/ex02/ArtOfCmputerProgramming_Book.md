@@ -42,6 +42,11 @@ The next step is to insert b3 among {b1 , a1, a2}, then b2 among the other eleme
 
 Picture 8.
 
+Main chain (a's):      [2,   3,    4,    7,  8,  10]  ← Відсортовані елементи + b1
+Smaller elements(b's): [1,   5,    6,    9]           ← Відповідні smaller елементи
+                       ↑     ↑     ↑     ↑
+Співвідношення:       b1≤a1 b2≤a2 b3≤a3 b4≤a4
+
 Let us call the upper-line elements the main chain. We can insert b5 into its proper place in the main chain, using three comparisons (first comparing it to c4, then c 2 or c 6 , etc.); then b4 can be moved into the main chain in three more steps, leading to:
 
 Picture 9.
@@ -64,7 +69,7 @@ S(21) = 66.
 In general, merge insertion proceeds as follows for n elements:
 i) Make pairwise comparisons of [n/2] disjoint pairs of elements. (If n is odd, leave one element out.)
 ii) Sort the [n/2] larger numbers, found in step (i), by merge insertion.
-iii) Name the elements a1, a2, ... , a[n/2], b1, b2, ... , b[n/2] as in (Picture 7), where a1 <= a2 ... <=> a[n/2] and bi <= i for 1 <= i <= [n/2]; call b1 and the a's the "main chain.Insert the remaining b's into the main chain, using binary
+iii) Name the elements a1, a2, ... , a[n/2], b1, b2, ... , b[n/2] as in (Picture 7), where a1 <= a2 ... <=> a[n/2] and bi <= i for 1 <= i <= [n/2]; call b1 and the a's the "main chain". Insert the remaining b's into the main chain, using binary
 insertion, in the following order, leaving out all bj for j > [n/2]:
 
 Picture 11:
@@ -78,6 +83,7 @@ where the main chain up to and including atk-1 contains 2tk-1 + (tk - tk-1 - 1) 
 This number must be less than 2 to the power of k; our best bet is to set it equal to 2k - 1, so that:
 
 Picture 12.
+
 tk-1 + tk = 2 to the power of k.
 
 (Continuation.)

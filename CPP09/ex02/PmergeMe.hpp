@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:19 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/28 13:47:08 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/10/28 18:22:52 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ class PmergeMe {
 
 		// Core algorithm functions
 		// void fordJohnsonSort(std::vector<int>& vec);
-		// void insertIntoMainChain(std::vector<int>& mainChain, int value);
-		// std::vector<int> generateJacobsthalSequence(int n);
+		std::vector<size_t> generateJacobsthalSequence(size_t n);
+		std::vector<size_t> generateInsertionOrder(size_t pend_size);
 		
 		// // Utility functions
 		
@@ -48,8 +48,7 @@ class PmergeMe {
 		PmergeMe& operator=(const PmergeMe& assign);
 		
 		void sort(std::vector<int>& vec);
-		void sortPairs(std::vector<Pair>& pairs, int unpaired, bool has_unpaired);
-		void buildSortedVector(std::vector<int>& vec, std::vector<Pair>& pairs, 
+		void buildSortedVector(std::vector<int>& vec, const std::vector<Pair>& pairs, 
 			int unpaired_element, bool has_unpaired);
     	void display();
 

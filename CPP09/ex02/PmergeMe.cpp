@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:13 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/28 13:58:54 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/10/28 19:19:27 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <cctype>	// for std::isdigit
 #include <climits>  // INT_MAX
 #include <set>
+
+#include <algorithm> // Для std::min
 
 PmergeMe::PmergeMe(const std::vector<int> & parsed_numbers)
 	: _numbers(parsed_numbers) {
@@ -38,6 +40,12 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& assign) {
 	}
 	return *this;
 }
+
+/* static void display_vector(const std::vector<size_t> & vct) {
+	for (std::vector<size_t>::const_iterator it = vct.begin();
+		it != vct.end(); ++it)
+			std::cout << *it << " ";
+} */
 
 /* static void display_vector(const std::vector<int> & vct) {
 	for (std::vector<int>::const_iterator it = vct.begin();
@@ -64,171 +72,23 @@ void PmergeMe::insertInSortedVector(std::vector<int>& vec, int value) {
     vec.insert(vec.begin() + left, value);
 }
 
-/* sortPairs(): Тільки сортує пари по larger елементах */
-void PmergeMe::sortPairs(std::vector<Pair>& pairs, int unpaired, bool has_unpaired) {
-    std::cout << "sortPairs() called with " << pairs.size() << " pairs";
-	/* std::cout << "pairs[0] larger " << pairs[0].larger << std::endl;
-	std::cout << "pairs[0] smaller " << pairs[0].smaller << std::endl; */
-    if (has_unpaired) {
-        std::cout << " + unpaired: " << unpaired;
-    }
-    std::cout << std::endl;
-
-	// Debug output
-    std::cout << "pairs: ";
-    for (size_t i = 0; i < pairs.size(); ++i) {
-        std::cout << "(" << pairs[i].smaller << "," << pairs[i].larger << ") ";
-    }
-    if (has_unpaired) {
-        std::cout << " + unpaired: " << unpaired;
-    }
-    std::cout << std::endl;
-	
-	// Base cases for pair sorting
-    if (pairs.empty()) {
-        return;
-    }
-    
-    if (pairs.size() == 1 && !has_unpaired) {
-		std::cout << "sortPairs base case: size is 1 and no unpaired" << std::endl;
-        return ; // Single pair, already sorted
-    }
-    
-    if (pairs.size() == 2 && !has_unpaired) {
-        if (pairs[0].larger > pairs[1].larger) {
-            std::swap(pairs[0], pairs[1]);
-        }
-        return;
-    }
-    
-    // Extract larger elements (a1, a2, a3, ...) for recursive sorting
-    std::vector<int> larger_elements;
-    for (size_t i = 0; i < pairs.size(); ++i) {
-        larger_elements.push_back(pairs[i].larger);
-    }
-    
-    // Add unpaired element to the sorting process
-    if (has_unpaired) {
-        larger_elements.push_back(unpaired);
-        std::cout << "Adding unpaired " << unpaired << " to larger elements" << std::endl;
-    }
-    
-    std::cout << "Before recursive sort: ";
-    for (size_t i = 0; i < larger_elements.size(); ++i) {
-        std::cout << larger_elements[i] << " ";
-    }
-    std::cout << std::endl;
-    
-    // РЕКУРСИВНО сортуємо larger elements як НОВІ ПАРИ
-    // Створюємо пари з larger_elements і рекурсивно сортуємо їх
-    if (larger_elements.size() > 1) {
-        std::vector<Pair> sub_pairs;
-        int sub_unpaired = 0;
-        bool sub_has_unpaired = false;
-        
-        if (larger_elements.size() % 2 != 0) {
-            sub_has_unpaired = true;
-            sub_unpaired = larger_elements.back();
-        }
-        
-        // Створюємо пари з larger_elements
-        for (size_t i = 0; i < larger_elements.size() - (sub_has_unpaired ? 1 : 0); i += 2) {
-            Pair p;
-            if (larger_elements[i] > larger_elements[i + 1]) {
-                p.larger = larger_elements[i];
-                p.smaller = larger_elements[i + 1];
-            } else {
-                p.larger = larger_elements[i + 1];
-                p.smaller = larger_elements[i];
-            }
-            sub_pairs.push_back(p);
-        }
-
-		//////
-        
-        // РЕКУРСИВНИЙ ВИКЛИК sortPairs()
-        sortPairs(sub_pairs, sub_unpaired, sub_has_unpaired);
-
-		// Debug output
-    	std::cout << "sortPairs() after recursion. Sorted pairs: ";
-    	for (size_t i = 0; i < sub_pairs.size(); ++i) {
-      	  std::cout << "(" << sub_pairs[i].smaller << "," << sub_pairs[i].larger << ") ";
-		}
-    	if (sub_has_unpaired) {
-        	std::cout << " + unpaired: " << sub_unpaired;
-    	}
-    	std::cout << std::endl;
-
-		///////
-		
-		// Витягуємо відсортовані larger elements
-        larger_elements.clear();
-		// sub_pairs вже відсортовані по larger елементах після рекурсії
-		// Створюємо main chain з larger елементів
-		std::vector<int> main_chain;
-		std::vector<int> pend_elements;
-
-		for (size_t i = 0; i < sub_pairs.size(); ++i) {
-    		main_chain.push_back(sub_pairs[i].larger);
-    		pend_elements.push_back(sub_pairs[i].smaller);
-		}
-
-		// Початкова основа - main chain (вже відсортована)
-	larger_elements = main_chain;
-
-	// Вставляємо pend елементи ВРУЧНО (без std::lower_bound)
-	for (size_t i = 0; i < pend_elements.size(); ++i) {
-		insertInSortedVector(larger_elements, pend_elements[i]);
-	}
-
-	// Вставляємо unpaired елемент
-	if (sub_has_unpaired) {
-		insertInSortedVector(larger_elements, sub_unpaired);
-	}
-    
-    std::cout << "After recursive sort: ";
-    for (size_t i = 0; i < larger_elements.size(); ++i) {
-        std::cout << larger_elements[i] << " ";
-    }
-    std::cout << std::endl;
-    
-    // Reorder pairs based on sorted larger elements (excluding unpaired)
-    // Reorder original pairs based on sorted larger elements
-    std::vector<Pair> sorted_pairs;
-    for (size_t i = 0; i < larger_elements.size(); ++i) {
-        if (has_unpaired && larger_elements[i] == unpaired) {
-            continue;
-        }
-        
-        for (size_t j = 0; j < pairs.size(); ++j) {
-            if (pairs[j].larger == larger_elements[i]) {
-                sorted_pairs.push_back(pairs[j]);
-                pairs.erase(pairs.begin() + j);
-                break;
-            }
-        }
-    }
-	
-    pairs = sorted_pairs;
-}
-}
-
+/* Recursive method */
 void PmergeMe::sort(std::vector<int>& vec) {
-    // Викликається ТІЛЬКИ ОДИН РАЗ на початку
-    std::cout << "sort() called ONCE with: ";
-    for (size_t i = 0; i < vec.size(); ++i) {
+    
+	std::cout << "sort() called with: ";
+    for (size_t i = 0; i < vec.size(); ++i)
         std::cout << vec[i] << " ";
-    }
     std::cout << "(size=" << vec.size() << ")" << std::endl;
     
     // Base cases
     if (vec.size() <= 1) {
+		this->_sorted_numbers = vec;
         return;
-    }
+	}
     if (vec.size() == 2) {
-        if (vec[0] > vec[1]) {
+        if (vec[0] > vec[1])
             std::swap(vec[0], vec[1]);
-        }
+		this->_sorted_numbers = vec;
         return;
     }
     
@@ -266,57 +126,355 @@ void PmergeMe::sort(std::vector<int>& vec) {
     }
 
 	// Debug output
-    std::cout << "Sort(). Sorted pair before sortPairs(): ";
+    /* std::cout << "Sort(). Sorted pair before sortPairs(): ";
     for (size_t i = 0; i < pairs.size(); ++i) {
         std::cout << "(" << pairs[i].smaller << "," << pairs[i].larger << ") ";
     }
-    if (has_unpaired) {
+    if (has_unpaired)
         std::cout << " + unpaired: " << unpaired_element;
-    }
+    std::cout << std::endl; */
+	
+	// Step 2: Extract larger elements (a1, a2, a3, ...) for recursive
+	// Ford-Johnson sorting
+    std::vector<int> larger_elements;
+    for (size_t i = 0; i < pairs.size(); ++i)
+        larger_elements.push_back(pairs[i].larger);
+    
+    // Add unpaired element to the sorting process - removed
+    
+    std::cout << "Larger elements for recursive sort: ";
+    for (size_t i = 0; i < larger_elements.size(); ++i)
+        std::cout << larger_elements[i] << " ";
     std::cout << std::endl;
     
-    // Step 2: Sort pairs recursively
-    sortPairs(pairs, unpaired_element, false);
+    // Step 3: Sort recursively
+    sort(larger_elements);
     
-	// Debug output
-    std::cout << "Sort(). Sorted pairs: ";
-    for (size_t i = 0; i < pairs.size(); ++i) {
+	std::cout << "After recursive sort. Sorted main chain A : ";
+    for (size_t i = 0; i < larger_elements.size(); ++i)
+        std::cout << larger_elements[i] << " ";
+    std::cout << std::endl;
+
+    // Step 4: Reorder pairs based on sorted larger elements
+	std::vector<Pair> reordered_pairs;
+    
+    // Переставляємо пари відповідно до відсортованих larger елементів
+    for (size_t i = 0; i < larger_elements.size(); ++i) {
+        // Пропускаємо unpaired елемент
+        if (has_unpaired && larger_elements[i] == unpaired_element) {
+            continue;
+        }
+        
+        // Знаходимо пару з цим larger елементом
+        for (size_t j = 0; j < pairs.size(); ++j) {
+            if (pairs[j].larger == larger_elements[i]) {
+                reordered_pairs.push_back(pairs[j]);
+                pairs.erase(pairs.begin() + j);
+                break;
+            }
+        }
+    }
+    
+    pairs = reordered_pairs;
+    
+    // Debug output
+    std::cout << "Reordered pairs: ";
+    for (size_t i = 0; i < pairs.size(); ++i)
         std::cout << "(" << pairs[i].smaller << "," << pairs[i].larger << ") ";
-    }
-    if (has_unpaired) {
+    if (has_unpaired)
         std::cout << " + unpaired: " << unpaired_element;
-    }
     std::cout << std::endl;
 	
-    // Step 3: Build final result
+    // Step 5: Build final result
     buildSortedVector(vec, pairs, unpaired_element, has_unpaired);
 }
 
-void PmergeMe::buildSortedVector(std::vector<int>& vec, std::vector<Pair>& pairs, int unpaired_element, bool has_unpaired) {
-	// Temporary: copy results back to vec
-    vec.clear();
-	
-  	 // Спочатку додаємо ВСІ larger елементи (вони вже відсортовані після merge_sort)
-    for (size_t i = 0; i < pairs.size(); ++i) {
-        vec.push_back(pairs[i].larger);
-    }
+void PmergeMe::buildSortedVector(std::vector<int>& vec, const std::vector<Pair>& pairs, 
+		int unpaired_element, bool has_unpaired) {
+	// Main chain - відсортовані larger елементи
+    std::vector<int> main_chain; // (a1, a2, ...)
+    std::vector<int> pend_elements; // (b1, b2, ...) + unpaired
     
-    // Step 4: Потім вставляємо smaller елементи (це буде наступний 
-	// крок Ford-Johnson)
-    // Поки що просто додамо їх:
     for (size_t i = 0; i < pairs.size(); ++i) {
-        // Знайти правильне місце для pairs[i].smaller
-        // Поки що просто додамо на початок:
-        vec.insert(vec.begin(), pairs[i].smaller);
-    }
-    
-    if (has_unpaired) {
-        vec.push_back(unpaired_element);
+		// b1 to main_chain
+		if (i == 0)
+			main_chain.push_back(pairs[i].smaller); // b1
+		else
+			pend_elements.push_back(pairs[i].smaller); // b2, b3, b4, ...
+        main_chain.push_back(pairs[i].larger); // a1, a2, a3, ...
     }
 
-	_sorted_numbers = vec;
+	if (has_unpaired)
+		pend_elements.push_back(unpaired_element);
+    
+    std::cout << "Main chain: ";
+    for (size_t i = 0; i < main_chain.size(); ++i)
+        std::cout << main_chain[i] << " ";
+    std::cout << std::endl;
+    
+    std::cout << "Pend elements: ";
+    for (size_t i = 0; i < pend_elements.size(); ++i)
+        std::cout << pend_elements[i] << " ";
+    std::cout << std::endl;
+    
+    // Start with main chain
+    vec = main_chain;
+
+	// Generate optimal insertion order using Jacobsthal sequence
+    std::vector<size_t> insertion_order = generateInsertionOrder(pend_elements.size());
+    
+	std::cout << "Jacobsthal insertion order: ";
+    for (size_t i = 0; i < insertion_order.size(); ++i) {
+        std::cout << insertion_order[i] << " ";
+    }
+    std::cout << std::endl;
+	
+    // Insert pend elements in Jacobsthal order
+
+	for (size_t i = 0; i < insertion_order.size(); ++i) {
+        size_t index = insertion_order[i];
+        if (index < pend_elements.size()) {
+            std::cout << "Inserting pend_elements[" << index << "] = " 
+                     << pend_elements[index] << std::endl;
+            insertInSortedVector(vec, pend_elements[index]);
+        }
+    }
+	
+    /* for (size_t i = 0; i < pend_elements.size(); ++i) {
+        insertInSortedVector(vec, pend_elements[i]);
+    } */
+
+
+    
+    _sorted_numbers = vec;
 }
 
+std::vector<size_t>	PmergeMe::generateJacobsthalSequence(size_t n) {
+	
+	std::vector<size_t> jacobsthal;
+	if (n == 0)
+		return jacobsthal;
+	jacobsthal.push_back(1);  // J(1) = 1
+	if (n == 1)
+		return jacobsthal;
+    jacobsthal.push_back(1);  // J(2) = 1  
+    if (n == 2)
+		return jacobsthal;
+    
+    // J(k) = J(k-1) + 2*J(k-2)
+    for (size_t i = 3; i <= n; ++i) {
+        size_t next = jacobsthal[i-2] + 2 * jacobsthal[i-3]; // ??
+        jacobsthal.push_back(next);
+    }
+	
+	return jacobsthal;
+}
+
+// порядок Якобсталя: i=3, 2, 5, 4, 11, ...)
+// Це дозволить вставляти елементи у ланцюги довжиною 2^k - 1, 
+// що вимагає найменшої кількості порівнянь.
+
+// функція, яка генерує послідовність індексів вставки pi для поточної 
+// довжини Вашого Pend List
+
+// Gemini
+/* std::vector<size_t> PmergeMe::generateInsertionOrder(size_t pend_size) {
+    
+    std::vector<size_t> insertion_order;
+    if (pend_size == 0)
+        return insertion_order;
+
+    // 1. Генеруємо послідовність Якобсталя
+    // Нам потрібні індекси b_i (де i = 2, 3, 4, ...)
+    // Класичні J_k: J1=1, J2=3, J3=5, J4=11, ...
+    std::vector<size_t> jacobsthal = generateJacobsthalSequence(pend_size + 20); 
+    
+    // Вектор для відстеження вставлених елементів (індекси 0, 1, 2, ...)
+    std::vector<bool> inserted(pend_size, false);
+    
+    // Індекс k для J_k. Починаємо з k=2, оскільки J1 (b1) вже оброблено.
+    // J_2 = 3. Це означає, що ми вставлятимемо елементи аж до b3.
+    size_t k = 2; 
+
+    // Вставляємо елемент b1 (класично), якщо він є у Pend List
+    // Оскільки B1 вже в main_chain, Pend List починається з b2 (індекс 0).
+    // Перша група вставки: B_3 та B_2.
+    
+    // Починаємо генерацію груп Якобсталя
+    while (insertion_order.size() < pend_size) {
+
+        // --- 1. Визначення меж вставки ---
+        // target_i: Класичний індекс b_i, який є поточним J_k
+        // prev_i: Класичний індекс b_i, який є попереднім J_{k-1}
+        
+        size_t target_i = 0;
+        if (k < jacobsthal.size()) {
+            target_i = jacobsthal[k];
+        } else {
+            // Якщо індекс J_k виходить за межі згенерованого J-списку
+            target_i = pend_size + 100; // Просто велике число
+        }
+        
+        // Попереднє число Якобсталя. J1=1, J2=3, J3=5...
+        size_t prev_i = (k > 1) ? jacobsthal[k - 1] : 0; 
+
+        // --- 2. Коригування меж під розмір Pend List ---
+        // У нас Pend List починається з b2 (індекс 0)
+        // target_limit: Кінцевий індекс в Pend List, який ми вставляємо
+        // start_i: Початковий індекс в Pend List (після попередньої групи)
+        
+        size_t start_i = prev_i;
+
+        // --- 3. Вставляємо елементи у зворотному порядку ---
+        // Індекси b_i: [..., 4, 3, 2]
+        // Індекси в Pend List: [..., 2, 1, 0] (якщо b2, b3, b4)
+        
+        bool group_inserted = false;
+		
+		// Ітеруємо від J_k до J_{k-1} + 1 у класичних індексах b_i (тобто спадаємо)
+		// Ми використовуємо target_i, оскільки він містить J_k або min(J_k, pend_size+1)
+		// Починаємо з індексу J_k. Закінчуємо на індексі J_{k-1} + 1.
+		for (size_t i = std::min(target_i, pend_size + 1); i > start_i + 1; --i) { 
+			// i - класичний індекс b_i, починаючи від 2.
+			// Це забезпечує, що ми отримуємо [J_k, J_{k-1} + 1]
+			// pend_index = i - 2 (оскільки b1 ігноруємо, а b2 - це індекс 0)
+			size_t pend_index = i - 2; 
+			if (pend_index < pend_size && !inserted[pend_index]) {
+				insertion_order.push_back(pend_index);
+				inserted[pend_index] = true;
+				group_inserted = true;
+			}
+		}
+        
+        // Якщо не було вставлено жодного елемента, група J_k занадто велика.
+        if (!group_inserted && target_i > pend_size) {
+             // --- 4. Додаємо решту елементів (лінійно) ---
+             for (size_t i = 0; i < pend_size; ++i) {
+                 if (!inserted[i]) {
+                     insertion_order.push_back(i);
+                     inserted[i] = true;
+                 }
+             }
+             break;
+        }
+
+        // --- 5. Перехід до наступної групи ---
+        k++; 
+    }
+    
+    return insertion_order;
+} */
+
+/* У main_chain вже є b₁, тому pend_elements містить:
+pend_elements[0] = b₂  ← Індекс масиву 0 = класичний b₂ */
+/* Класичний порядок: (1), (3,2), (5,4) → НЕ потрібен b₁, бо він уже в main_chain
+Потрібний порядок: (b₃,b₂), (b₅,b₄) = індекси [1,0], [3,2] */
+std::vector<size_t> PmergeMe::generateInsertionOrder(size_t pend_size) {
+    std::vector<size_t> insertion_order;
+    if (pend_size == 0) return insertion_order;
+
+    std::vector<size_t> jacobsthal = generateJacobsthalSequence(20);
+    std::vector<bool> inserted(pend_size, false);
+    
+    // Класична послідовність Якобсталя: 1, 3, 5, 11, 21, ...
+    // Групи вставки: (1), (3,2), (5,4), (11,10,9,8,7,6), ...
+    // Але b₁ уже в main_chain, тому починаємо з групи (3,2)
+    size_t group_end = 1; // Початкова межа (b₁ уже оброблено)
+    
+    for (size_t j_index = 1; j_index < jacobsthal.size() && insertion_order.size() < pend_size; ++j_index) {
+        size_t jacob_num = jacobsthal[j_index]; // J₂=3, J₃=5, J₄=11, ...
+        
+        // Обмежуємо Jacob число розміром pend_elements + 1 (тому що b₁ не в pend)
+        size_t current_end = std::min(jacob_num, pend_size + 1);
+        
+        std::cout << "Jacob group " << j_index << ": from b" << current_end 
+                  << " down to b" << (group_end + 1) << std::endl;
+        
+        // Вставляємо елементи у зворотному порядку від current_end до group_end+1
+        for (size_t b_index = current_end; b_index > group_end; --b_index) {
+            // Конвертуємо класичний індекс b_i в індекс pend_elements
+            // b₂ → pend[0], b₃ → pend[1], b₄ → pend[2], ...
+            if (b_index >= 2) { // Пропускаємо b₁ (він уже в main_chain)
+                size_t pend_index = b_index - 2; // b₂→0, b₃→1, b₄→2, ...
+                if (pend_index < pend_size && !inserted[pend_index]) {
+                    std::cout << "Adding b" << b_index << " → pend_index " << pend_index << std::endl;
+                    insertion_order.push_back(pend_index);
+                    inserted[pend_index] = true;
+                }
+            }
+        }
+        
+        group_end = current_end;
+    }
+
+	// Додаємо решту елементів (якщо є)
+    for (size_t i = 0; i < pend_size; ++i) {
+        if (!inserted[i]) {
+            insertion_order.push_back(i);
+            inserted[i] = true;
+        }
+    }
+    
+    return insertion_order;
+}
+
+/* std::vector<size_t>	PmergeMe::generateInsertionOrder(size_t pend_size) {
+	
+	std::vector<size_t> insertion_order;
+	
+    if (pend_size == 0)
+		return insertion_order;
+	// Generate Jacobsthal numbers up to pend_size
+	// 20 достатньо для практичних цілей
+    std::vector<size_t> jacobsthal = generateJacobsthalSequence(20);
+	//display_vector(jacobsthal);
+    
+    std::vector<bool> inserted(pend_size, false);
+    size_t jacob_index = 2; // Починаємо з J(3) = 3 // Why not 1?
+    
+    while (insertion_order.size() < pend_size) {
+        // Знайти наступне число Якобсталя <= pend_size
+        size_t target = 0;
+        if (jacob_index < jacobsthal.size()) {
+            target = jacobsthal[jacob_index];
+        }
+        
+        // Якщо Якобсталеве число перевищує розмір, беремо останній елемент
+        if (target > pend_size) {
+            target = pend_size;
+        }
+        
+        // Вставляємо елементи від target до попереднього Якобсталевого 
+		// числа (у зворотному порядку)
+        size_t prev_jacob = 1; // За замовчуванням - перше число Якобсталя
+		if (jacob_index > 2) {
+			prev_jacob = jacobsthal[jacob_index - 1];
+		}
+        
+        for (size_t i = target; i > prev_jacob; --i) {
+            if (i <= pend_size && !inserted[i - 1]) { // -1 бо індекси від 0
+                insertion_order.push_back(i - 1);
+                inserted[i - 1] = true;
+            }
+        }
+        
+        jacob_index++;
+        
+        // Додаємо решту елементів у порядку зростання
+        if (jacob_index >= jacobsthal.size() || 
+			jacobsthal[jacob_index] > pend_size) {
+            for (size_t i = 0; i < pend_size; ++i) {
+                if (!inserted[i]) {
+                    insertion_order.push_back(i);
+                    inserted[i] = true;
+                }
+            }
+            break;
+        }
+    }
+    
+    return insertion_order;
+} */
 
 void PmergeMe::display() {
 	std::cout << "Before: ";
@@ -331,7 +489,10 @@ void PmergeMe::display() {
 			std::cout << *it << " ";
 			++it;
 		}
-		std::cout << "[...]";
+		std::cout << "[...] ";
+		/// Increments given iterator it by n elements.
+		std::advance(it, _numbers.size() - 5);  
+		std::cout << *it;
 	}
 	std::cout << std::endl;
 	std::cout << "After:  ";
@@ -344,11 +505,11 @@ void PmergeMe::display() {
 		for (int i = 0; i < 4; i++, it++) {
 			std::cout << *it << " ";
 		}
-		std::cout << "[...]";
+		std::cout << "[...] ";
+		/// Increments given iterator it by n elements.
+		std::advance(it, _sorted_numbers.size() - 5);  
+		std::cout << *it;
 	}
-	/// to print last sorted elements (even for a list)
-	// std::advance(it, size - 10);  
-	
 	std::cout << std::endl;
 }
 
