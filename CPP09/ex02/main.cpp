@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:52:18 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/27 18:28:00 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/10/29 17:47:12 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 		return 1;
 	
 	PmergeMe	SortObj(numbers);
-	SortObj.sort(numbers);
+	SortObj.fordJohnsonSort(numbers);
 	SortObj.display();
 
 	return 0;
