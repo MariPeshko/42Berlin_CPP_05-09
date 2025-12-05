@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:13 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/30 13:02:02 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/05 16:57:27 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,15 @@
 #include <cctype>  // for std::isdigit
 #include <climits> // INT_MAX
 #include <set>
+#include <algorithm> // for std::min
 
-#include <algorithm> // Для std::min
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::string;
 
 int	PmergeMe::nbr_of_comps = 0;
+int	PmergeMe::nbr_of_recur = 0;
 
 PmergeMe::PmergeMe(const std::vector<int> &parsed_numbers)
 	: _numbers(parsed_numbers)
@@ -49,32 +54,29 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &assign)
 /* static void display_vector(const std::vector<size_t> & vct) {
 	for (std::vector<size_t>::const_iterator it = vct.begin();
 		it != vct.end(); ++it)
-			std::cout << *it << " ";
+			cout << *it << " ";
 } */
 
-/* static void display_vector(const std::vector<int> & vct) {
+static void display_vector(const std::vector<int> & vct) {
 	for (std::vector<int>::const_iterator it = vct.begin();
 		it != vct.end(); ++it)
-			std::cout << *it << " ";
-} */
+			cout << *it << " ";
+	cout << endl;
+}
 
-// Binary search for insertion
-void PmergeMe::insertInSortedVector(std::vector<int> &vec, int value)
+// Binary search for insertion with a bound
+void PmergeMe::insertInSortedVector(std::vector<int> &vec, int value, size_t bound)
 {
-
 	size_t left = 0;
-	size_t right = vec.size();
+	size_t right = bound;
 
 	while (left < right)
 	{
 		size_t mid = left + (right - left) / 2;
-		PmergeMe::nbr_of_comps++; ////
-		if (vec[mid] < value)
-		{
+		PmergeMe::nbr_of_comps++;
+		if (vec[mid] < value) {
 			left = mid + 1;
-		}
-		else
-		{
+		} else {
 			right = mid;
 		}
 	}
@@ -84,25 +86,24 @@ void PmergeMe::insertInSortedVector(std::vector<int> &vec, int value)
 /* Recursive method */
 void PmergeMe::fordJohnsonSort(std::vector<int> &vec)
 {
-
-	std::cout << "sort() called with: ";
-	for (size_t i = 0; i < vec.size(); ++i)
-		std::cout << vec[i] << " ";
-	std::cout << "(size=" << vec.size() << ")" << std::endl;
-
+	++PmergeMe::nbr_of_recur;
+	if (DEBUG_RECURSION) {
+		cout << GREEN << "fordJohnsonSort() called ";
+		cout << PmergeMe::nbr_of_recur << " time(s) with: ";
+		for (size_t i = 0; i < vec.size(); ++i)	cout << vec[i] << " ";
+		cout << "(size=" << vec.size() << ")" << RESET << endl;
+	}
 	// Base cases
 	if (vec.size() <= 1) {
 		this->_sorted_numbers = vec;
 		return ;
 	}
 	if (vec.size() == 2) {
-		PmergeMe::nbr_of_comps++; ////////
-		if (vec[0] > vec[1])
-			std::swap(vec[0], vec[1]);
+		PmergeMe::nbr_of_comps++;
+		if (vec[0] > vec[1]) std::swap(vec[0], vec[1]);
 		this->_sorted_numbers = vec;
 		return ;
 	}
-
 	// Step 1: Create pairs and handle unpaired element
 	std::vector<Pair>	pairs;
 	int					unpaired_element = 0;
@@ -110,43 +111,50 @@ void PmergeMe::fordJohnsonSort(std::vector<int> &vec)
 
 	createPairs(pairs, vec, unpaired_element, has_unpaired);
 	// Debug output
-	std::cout << "Divide elements into pairs (smaller, larger):\n";
-	for (size_t i = 0; i < pairs.size(); ++i)
-		std::cout << "(" << pairs[i].smaller << "," << pairs[i].larger << ") ";
-	if (has_unpaired)
-		std::cout << " + unpaired: " << unpaired_element;
-	std::cout << std::endl;
+	if (DEBUG_RECURSION) {
+		cout << BLUE << "Divide elements into pairs (smaller, larger):\n";
+		for (size_t i = 0; i < pairs.size(); ++i)
+			cout << "(" << pairs[i].smaller << "," << pairs[i].larger << ") ";
+		if (has_unpaired)
+			cout << BLUE << " + unpaired: " << unpaired_element;
+		cout << RESET << endl;
+	} 
 	
 	// Step 2: Extract larger elements (a1, a2, a3, ...) for recursive sorting
 	std::vector<int>	larger_elements;
 	for (size_t i = 0; i < pairs.size(); ++i)
 		larger_elements.push_back(pairs[i].larger);
 
-	// Debug output
-	std::cout << "Larger elements for recursive sort: ";
-	for (size_t i = 0; i < larger_elements.size(); ++i)
-		std::cout << larger_elements[i] << " ";
-	std::cout << std::endl;
-
+	if (DEBUG_RECURSION) {
+		cout << YELLOW << "Larger elements for recursive sort: ";
+		for (size_t i = 0; i < larger_elements.size(); ++i)
+			cout << larger_elements[i] << " ";
+		cout << RESET << endl;
+	}
 	// Step 3: Sort recursively
 	fordJohnsonSort(larger_elements);
-
-	std::cout << "After recursive sort. Sorted main chain A : ";
-	for (size_t i = 0; i < larger_elements.size(); ++i)
-		std::cout << larger_elements[i] << " ";
-	std::cout << std::endl;
-
+	if (DEBUG_RECURSION) {
+		cout << ORANGE << "After " << PmergeMe::nbr_of_recur << " layer of the recursive sort.";
+		cout << RESET << endl;
+	}
+	--PmergeMe::nbr_of_recur;
+	if (DEBUG_RECURSION || DEBUG_PART2) {
+		cout << ORANGE << "SORTED MAIN CHAIN A : ";
+		for (size_t i = 0; i < larger_elements.size(); ++i)
+			cout << larger_elements[i] << " ";
+		cout << RESET << endl;
+	}
 	// Step 4: Reorder pairs based on sorted larger elements
 	reorderPairs(pairs, larger_elements);
-
-	// Debug output
-	std::cout << "Reordered pairs:\n";
-	for (size_t i = 0; i < pairs.size(); ++i)
-		std::cout << "(" << pairs[i].smaller << "," << pairs[i].larger << ") ";
-	if (has_unpaired)
-		std::cout << " + unpaired: " << unpaired_element;
-	std::cout << std::endl;
-
+	if (DEBUG_PART2) {
+		cout << GREEN << "Reordered pairs:\n";
+		for (size_t i = 0; i < pairs.size(); ++i)
+			cout << "(" << pairs[i].smaller << "," << pairs[i].larger << ") ";
+		if (has_unpaired)
+			cout << " + unpaired: " << unpaired_element;
+		cout << RESET << endl;
+	}
+	
 	// Step 5: Build final result
 	buildSortedVector(vec, pairs, unpaired_element, has_unpaired);
 	_sorted_numbers = vec;
@@ -165,6 +173,7 @@ void	PmergeMe::createPairs(std::vector<Pair> &pairs, const std::vector<int> &vec
 		if ((it + 1) == vec.end())
 			break; // Odd number, last element handled above
 		Pair p;
+		PmergeMe::nbr_of_comps++;
 		if (*it > *(it + 1)) {
 			p.larger = *it;
 			p.smaller = *(it + 1);
@@ -212,13 +221,13 @@ void PmergeMe::reorderPairs(std::vector<Pair> &pairs,
 void PmergeMe::buildSortedVector(std::vector<int> &vec, const std::vector<Pair> &pairs,
 								 int unpaired_element, bool has_unpaired)
 {
-
 	std::vector<int> main_chain;	// (a1, a2, ...)
 	std::vector<int> pend_elements; // (b1, b2, ...) + unpaired
-
+	
+	if (DEBUG_PART2) cout << ORANGE << "PART2. Building a sorted vector.\n";
+	if (DEBUG_PART2) cout << YELLOW <<  "b1 = " << pairs[0].smaller << " and it first goes to main_chain" << RESET << endl;
 	for (size_t i = 0; i < pairs.size(); ++i)
 	{
-		// b1 to main_chain
 		if (i == 0)
 			main_chain.push_back(pairs[i].smaller); // b1
 		else
@@ -229,40 +238,81 @@ void PmergeMe::buildSortedVector(std::vector<int> &vec, const std::vector<Pair> 
 	if (has_unpaired)
 		pend_elements.push_back(unpaired_element);
 
-	std::cout << "Main chain: ";
-	for (size_t i = 0; i < main_chain.size(); ++i)
-		std::cout << main_chain[i] << " ";
-	std::cout << std::endl;
-
-	std::cout << "Pend elements: ";
-	for (size_t i = 0; i < pend_elements.size(); ++i)
-		std::cout << pend_elements[i] << " ";
-	std::cout << std::endl;
-
+	if (DEBUG_PART2) {
+		cout << BLUE << "MAIN CHAIN:    ";
+		for (size_t i = 0; i < main_chain.size(); ++i)
+			cout << main_chain[i] << " ";
+		cout << endl;
+		cout << "PEND ELEMENTS: ";
+		for (size_t i = 0; i < pend_elements.size(); ++i)
+			cout << pend_elements[i] << " ";
+		cout << RESET << endl;
+	}
 	// Start with main chain
 	vec = main_chain;
-
 	// Generate optimal insertion order using Jacobsthal sequence
 	std::vector<size_t> insertion_order;
 	insertion_order = generateInsertionOrder(pend_elements.size());
 
-	std::cout << "Jacobsthal insertion order: ";
-	for (size_t i = 0; i < insertion_order.size(); ++i)
-	{
-		std::cout << insertion_order[i] << " ";
+	if (Jacobsthal) {
+		cout << GREEN << "Jacobsthal insertion order: ";
+		for (size_t i = 0; i < insertion_order.size(); ++i) {
+			cout << insertion_order[i] << " ";
+		}
+		cout << RESET << endl;
 	}
-	std::cout << std::endl;
 
+	// bound the binary search for b_i by the current position of its partner a_i in the main chain
+	// keep track of indexposition of pairs
+	std::vector<size_t>	indexposition(pairs.size(), 0);
+	if (FULL_DEBUG) cout << "_ _ Index position calculation for a bound _ _" << endl;
+	for (size_t i = 1; i < pairs.size(); i++) {
+		if (FULL_DEBUG) cout << i + 1 << " pair. Smaller b_" << i + 1 << " element " << pairs[i].smaller << endl;
+		for (size_t j = 0; j < main_chain.size(); j++) {
+			if (pairs[i].larger == main_chain[j]) {
+				indexposition[i - 1] = j;
+				if (FULL_DEBUG) cout << "index of a_" << i + 1 << " element " << pairs[i].larger << " in main chain is: ";
+				if (FULL_DEBUG) cout << j << endl;  
+			}
+		}
+	}
+	if (has_unpaired) {
+		indexposition.push_back(main_chain.size());
+		if (FULL_DEBUG) cout << "For unpaired_element " << unpaired_element << " index position is the ";
+		if (FULL_DEBUG) cout << "whole main_chain size " << main_chain.size() << endl;  
+	}
+		
 	// Insert pend elements in Jacobsthal order
 	for (size_t i = 0; i < insertion_order.size(); ++i)
 	{
 		size_t index = insertion_order[i];
 		if (index < pend_elements.size())
 		{
-			std::cout << "Inserting pend_elements[" << index << "] = "
-					  << pend_elements[index] << std::endl;
-			insertInSortedVector(vec, pend_elements[index]);
+			if (FULL_DEBUG) cout << GREEN << "i is " << i << "; index is " << index << "; ";
+			if (FULL_DEBUG) cout << "indexposition[index] is " << indexposition[index] << endl;
+			size_t bound;
+			if (has_unpaired && index == (pend_elements.size() - 1)) {
+				if (FULL_DEBUG) cout << "for unpaired element we use binary search for a whole chain" << endl;
+				bound = vec.size();
+			}
+			else
+				bound = indexposition[index] + i;
+			
+			if (FULL_DEBUG) {
+				cout << YELLOW << "Inserting pend_elements[" << index << "] = "
+				<< pend_elements[index] << endl;
+				cout << "bound: " << bound << RESET << endl;
+			}
+			insertInSortedVector(vec, pend_elements[index], bound);
+			
 		}
+	}
+	if (DEBUG_PART2) {
+		cout << "CURRENT SORTED VECTOR: ";
+		display_vector(vec); 
+		if (isSortedAscending(vec)) cout << GREEN << "Sorted correctly!" << RESET << endl;
+		else cout << RED << "Error. Not sorted correctly" << RESET << endl;
+		cout << endl;
 	}
 }
 
@@ -321,8 +371,8 @@ std::vector<size_t> PmergeMe::generateInsertionOrder(size_t pend_size)
 		// Обмежуємо Jacob число розміром pend_elements + 1 (тому що b₁ не в pend)
 		size_t current_end = std::min(jacob_num, pend_size + 1);
 
-		std::cout << "Jacob group " << j_index << ": from b" << current_end
-				  << " down to b" << (group_end + 1) << std::endl;
+		if (Jacobsthal) cout << "Jacob group " << j_index << ": from b" << current_end
+				  << " down to b" << (group_end + 1) << endl;
 
 		// Вставляємо елементи у зворотному порядку від current_end до group_end+1
 		for (size_t b_index = current_end; b_index > group_end; --b_index)
@@ -334,7 +384,7 @@ std::vector<size_t> PmergeMe::generateInsertionOrder(size_t pend_size)
 				size_t pend_index = b_index - 2; // b₂→0, b₃→1, b₄→2, ...
 				if (pend_index < pend_size && !inserted[pend_index])
 				{
-					std::cout << "Adding b" << b_index << " → pend_index " << pend_index << std::endl;
+					if (Jacobsthal) cout << "Adding b" << b_index << " → pend_index " << pend_index << endl;
 					insertion_order.push_back(pend_index);
 					inserted[pend_index] = true;
 				}
@@ -357,79 +407,82 @@ std::vector<size_t> PmergeMe::generateInsertionOrder(size_t pend_size)
 
 void	PmergeMe::display()
 {
-	std::cout << "Before: ";
+	cout << GREEN << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nBefore: ";
 	if (_size <= 15) {
 		for (std::vector<int>::const_iterator it = _numbers.begin();
 			 it != _numbers.end(); ++it)
-			std::cout << *it << " ";
+			cout << *it << " ";
 	} else {
 		std::vector<int>::const_iterator it = _numbers.begin();
 		for (int i = 0; i < 4; i++) {
-			std::cout << *it << " ";
+			cout << *it << " ";
 			++it;
 		}
-		std::cout << "[...] ";
+		cout << "[...] ";
 		/// Increments given iterator it by n elements.
 		std::advance(it, _numbers.size() - 5);
-		std::cout << *it;
+		cout << *it;
 	}
-	std::cout << std::endl;
-	std::cout << "After:  ";
+	cout << endl;
+	cout << GREEN << "After:  ";
 	if (_size <= 15) {
 		for (std::vector<int>::const_iterator it = _sorted_numbers.begin();
 			 it != _sorted_numbers.end(); ++it)
-			std::cout << *it << " ";
+			cout << *it << " ";
 	} else {
 		std::vector<int>::const_iterator it = _sorted_numbers.begin();
 		for (int i = 0; i < 4; i++, it++) {
-			std::cout << *it << " ";
+			cout << *it << " ";
 		}
-		std::cout << "[...] ";
+		cout << "[...] ";
 		/// Increments given iterator it by n elements.
 		std::advance(it, _sorted_numbers.size() - 5);
-		std::cout << *it;
+		cout << *it;
 	}
-	std::cout << std::endl;
-	std::cout << "Number of comparisons: " << PmergeMe::nbr_of_comps << std::endl;
+	cout << endl;
+	if (isSortedAscending(_sorted_numbers)) cout << GREEN << "Sorted correctly!" << RESET << endl;
+			else cout << RED << "Error. Not sorted correctly" << RESET << endl;
+	cout << YELLOW << "Theoretical max comparisons: " << fordJohnsonWorstCase(_size) << endl;
+	cout << BLUE << "Number of comparisons:       " << PmergeMe::nbr_of_comps << RESET << endl;
 }
 
 // static
-bool PmergeMe::isValidInput(const std::string &input)
+bool PmergeMe::isValidInput(const string &input)
 {
 	if (input.empty())
 	{
-		std::cerr << "Error: empty input" << std::endl;
+		cerr << "Error: empty input" << endl;
 		return false;
 	}
 	else if (input[0] == '-')
 	{
-		std::cerr << "Error" << std::endl; // negative integer
+		cerr << "Error" << endl; // negative integer
 		return false;
 	}
 	for (size_t i = 0; i < input.length(); i++)
 	{
 		if (!std::isdigit(static_cast<unsigned char>(input[i])))
 		{
-			std::cerr << "Error: " << input[i] << " not a digit" << std::endl;
+			cerr << "Error: " << input[i] << " not a digit" << endl;
 			return false;
 		}
 	}
 	return true;
 }
 
-bool PmergeMe::parseString(const std::string &inputstr, std::vector<int> &numbers)
+bool PmergeMe::parseString(const string &inputstr, std::vector<int> &numbers)
 {
 
 	std::istringstream iss(inputstr);
 	long number = 0;
 	if (!(iss >> number) || !iss.eof())
 	{
-		std::cerr << "Error: Invalid integer conversion." << std::endl;
+		cerr << "Error: Invalid integer conversion." << endl;
 		return false;
 	}
 	if (number > INT_MAX || number < 0)
 	{
-		std::cerr << "Error" << std::endl;
+		cerr << "Error" << endl;
 		return false;
 	}
 	numbers.push_back(static_cast<int>(number));
@@ -446,10 +499,28 @@ bool PmergeMe::isDuplicates(const std::vector<int> &numbers)
 	{
 		if (seen.find(*it) != seen.end())
 		{
-			std::cerr << "Duplicate found" << std::endl;
+			cerr << "Duplicate found" << endl;
 			return true;
 		}
 		seen.insert(*it);
 	}
 	return false;
 }
+
+long long PmergeMe::fordJohnsonWorstCase(int n)
+{
+    long long C = 0;
+    for (int i = 1; i <= n; ++i)
+        C += (long long)std::ceil(log2(3.0 * i / 4.0));
+    return C;
+}
+
+bool PmergeMe::isSortedAscending(const std::vector<int>& vec)
+{
+    if (vec.size() < 2) return true;
+    for (size_t i = 1; i < vec.size(); ++i) {
+        if (vec[i - 1] > vec[i]) return false;
+    }
+    return true;
+}
+

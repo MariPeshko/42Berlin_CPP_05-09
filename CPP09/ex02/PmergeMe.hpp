@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:19 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/30 12:55:21 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/05 16:57:43 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,18 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
+
+#define DEBUG_RECURSION 0
+#define DEBUG_PART2 0
+#define FULL_DEBUG 0
+#define Jacobsthal 0
+#define RESET "\033[0m"
+#define YELLOW "\033[33m"
+#define GREEN "\033[32m"
+#define BLUE "\033[34m"
+#define RED "\033[31m"
+#define ORANGE "\033[38;5;208m"
 
 struct	Pair {
 	int	smaller;
@@ -46,7 +58,7 @@ class PmergeMe {
 		// Utility functions
 		std::vector<size_t>	generateJacobsthalSequence(size_t n);
 		std::vector<size_t>	generateInsertionOrder(size_t pend_size);
-		void				insertInSortedVector(std::vector<int>& vec, int value);
+		void				insertInSortedVector(std::vector<int>& vec, int value, size_t bound);
 		
 
 	public:
@@ -54,11 +66,14 @@ class PmergeMe {
 		~PmergeMe();
 		PmergeMe(const PmergeMe& copy);
 		PmergeMe&	operator=(const PmergeMe& assign);
-
-		static int	nbr_of_comps; /// 
+		
+		static long long	fordJohnsonWorstCase(int n);
+		static int			nbr_of_comps;
+		static int			nbr_of_recur;
 		
 		void		fordJohnsonSort(std::vector<int>& vec);
 		void		display();
+		static bool	isSortedAscending(const std::vector<int>& vec);
 
 		// Parsing
 		static bool	isValidInput(const std::string & input);
