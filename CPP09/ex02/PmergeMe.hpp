@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:19 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/08 13:37:24 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 10:42:12 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ class PmergeMe {
 		PmergeMe(const PmergeMe& copy);
 		PmergeMe&	operator=(const PmergeMe& assign);
 
-		std::vector<int>	_numbers;
+		std::vector<int>	_numbers_vec;
 		std::deque<int>		_numbers_deque;
-		std::vector<int>	_sorted_numbers;
+		std::vector<int>	_sorted_numbers_vec;
 		std::deque<int>		_sorted_numbers_deque;
 		int					_size;
 
@@ -66,9 +66,14 @@ class PmergeMe {
 		std::vector<size_t>	generateJacobsthalSequence(size_t n);
 		std::vector<size_t>	generateInsertionOrder(size_t pend_size);
 		void				insertInSortedVector(std::vector<int>& vec, int value, size_t bound);
+	
+		// µs (microsecond) is a unit of time equal to one-millionth of a second
+		long	_totalUsVec;
+		long	_totalUsDeq;
 		
 	public:
-		PmergeMe(const std::vector<int> & _numbers);
+		PmergeMe(const std::vector<int> &parsed_numbers);
+		PmergeMe(const std::deque<int> &parsed_numbers);
 		~PmergeMe();
 		
 		static long long	fordJohnsonWorstCase(int n);
@@ -76,7 +81,12 @@ class PmergeMe {
 		static int			nbr_of_recur;
 		
 		void		fordJohnsonSort(std::vector<int>& vec);
-		void		display();
+		void		timeDiffVec(const struct timeval & begin, const struct timeval & end);
+		void		timeDiffDeq(const struct timeval & begin, const struct timeval & end);
+		void		displayVec();
+		void		displayVecTime();
+		void		displayDeqTime();
+		void		displayVecComparisons();
 		
 		// Parsing
 		static bool	isValidInput(const std::string & input);

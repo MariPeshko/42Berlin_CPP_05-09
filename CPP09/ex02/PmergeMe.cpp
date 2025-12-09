@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:13 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/08 13:17:51 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 10:42:49 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,26 +29,26 @@ int	PmergeMe::nbr_of_comps = 0;
 int	PmergeMe::nbr_of_recur = 0;
 
 PmergeMe::PmergeMe(const std::vector<int> &parsed_numbers)
-	: _numbers(parsed_numbers)
+	:
+	_numbers_vec(parsed_numbers),
+	_numbers_deque(),
+	_totalUsVec(0),
+	_totalUsDeq(0)
 {
-	_size = _numbers.size();
+	_size = _numbers_vec.size();
+}
+
+PmergeMe::PmergeMe(const std::deque<int> &parsed_numbers)
+	:
+	_numbers_vec(),
+	_numbers_deque(parsed_numbers),
+	_totalUsVec(0),
+	_totalUsDeq(0)
+{
+	_size = _numbers_deque.size();
 }
 
 PmergeMe::~PmergeMe() {}
-
-PmergeMe::PmergeMe(const PmergeMe &copy) : _numbers(copy._numbers),
-										   _sorted_numbers(copy._sorted_numbers)
-{
-}
-
-PmergeMe &PmergeMe::operator=(const PmergeMe &assign)
-{
-	if (this != &assign) {
-		_numbers = assign._numbers;
-		_sorted_numbers = assign._sorted_numbers;
-	}
-	return *this;
-}
 
 /* static void display_vector(const std::vector<size_t> & vct) {
 	for (std::vector<size_t>::const_iterator it = vct.begin();
@@ -93,13 +93,13 @@ void PmergeMe::fordJohnsonSort(std::vector<int> &vec)
 	}
 	// Base cases
 	if (vec.size() <= 1) {
-		this->_sorted_numbers = vec;
+		this->_sorted_numbers_vec = vec;
 		return ;
 	}
 	if (vec.size() == 2) {
 		PmergeMe::nbr_of_comps++;
 		if (vec[0] > vec[1]) std::swap(vec[0], vec[1]);
-		this->_sorted_numbers = vec;
+		this->_sorted_numbers_vec = vec;
 		return ;
 	}
 	// Step 1: Create pairs and handle unpaired element
@@ -155,7 +155,7 @@ void PmergeMe::fordJohnsonSort(std::vector<int> &vec)
 	
 	// Step 5: Build final result
 	buildSortedVector(vec, pairs, unpaired_element, has_unpaired);
-	_sorted_numbers = vec;
+	_sorted_numbers_vec = vec;
 }
 
 // Step 1: Create pairs from adjacent elements
@@ -399,49 +399,57 @@ std::vector<size_t>	PmergeMe::generateInsertionOrder(size_t pend_size)
 	return insert_order;
 }
 
-void	PmergeMe::display()
+void	PmergeMe::displayVec()
 {
 	cout << YELLOW << "Before: ";
 	if (_size <= 15) {
-		for (std::vector<int>::const_iterator it = _numbers.begin();
-			 it != _numbers.end(); ++it)
+		for (std::vector<int>::const_iterator it = _numbers_vec.begin();
+			 it != _numbers_vec.end(); ++it)
 			cout << *it << " ";
 	} else {
-		std::vector<int>::const_iterator it = _numbers.begin();
+		std::vector<int>::const_iterator it = _numbers_vec.begin();
 		for (int i = 0; i < 4; i++) {
 			cout << *it << " ";
 			++it;
 		}
 		cout << "[...] ";
 		/// Increments given iterator it by n elements.
-		std::advance(it, _numbers.size() - 5);
+		std::advance(it, _numbers_vec.size() - 5);
 		cout << *it;
 	}
 	cout << endl;
 	cout << GREEN << "After:  ";
 	if (_size <= 15) {
-		for (std::vector<int>::const_iterator it = _sorted_numbers.begin();
-			 it != _sorted_numbers.end(); ++it)
+		for (std::vector<int>::const_iterator it = _sorted_numbers_vec.begin();
+			 it != _sorted_numbers_vec.end(); ++it)
 			cout << *it << " ";
 	} else {
-		std::vector<int>::const_iterator it = _sorted_numbers.begin();
+		std::vector<int>::const_iterator it = _sorted_numbers_vec.begin();
 		for (int i = 0; i < 4; i++, it++) {
 			cout << *it << " ";
 		}
 		cout << "[...] ";
 		/// Increments given iterator it by n elements.
-		std::advance(it, _sorted_numbers.size() - 5);
+		std::advance(it, _sorted_numbers_vec.size() - 5);
 		cout << *it;
 	}
 	cout << RESET << endl;
 	if (SORTED) {
-		if (isSortedAscending(_sorted_numbers)) cout << GREEN << "Sorted correctly!" << RESET << endl;
+		if (isSortedAscending(_sorted_numbers_vec)) cout << GREEN << "Sorted correctly!" << RESET << endl;
 			else cout << RED << "Error. Not sorted correctly" << RESET << endl;
 	}
-	cout << "Time to process a range of 5 elements with std::vector:" << endl;
-	cout << "Time to process a range of 5 elements with std::deque: " << endl;
-	cout << GREEN << "Theoretical max comparisons: " << fordJohnsonWorstCase(_size) << endl;
-	cout << BLUE << "Number of comparisons:       " << PmergeMe::nbr_of_comps << RESET << endl;
+}
+
+void	PmergeMe::displayVecTime(){
+	cout << "Time to process a range of 5 elements with std::vector: ";
+	cout << _totalUsVec << " µs" << endl;
+	// std::cout << "Time difference in ms = " << (_totalUsVec / 1000) << "[ms]" << std::endl;
+}
+
+void	PmergeMe::displayDeqTime(){
+	cout << "Time to process a range of 5 elements with std::vector: ";
+	cout << _totalUsDeq << " µs" << endl;
+	// std::cout << "Time difference in ms = " << (_totalUsVec / 1000) << "[ms]" << std::endl;
 }
 
 // static
@@ -515,3 +523,25 @@ bool PmergeMe::isSortedAscending(const std::vector<int>& vec)
 	return true;
 }
 
+/**
+ * The number "1000000L" represents 1 million liters, written 
+ * numerically as 1,000,000.
+ */
+void	PmergeMe::timeDiffVec(const struct timeval& begin, const struct timeval& end) {
+	long	seconds  = end.tv_sec - begin.tv_sec;
+	long	usecDiff = end.tv_usec - begin.tv_usec;
+	this->_totalUsVec  = seconds * 1000000L + usecDiff;
+}
+
+void	PmergeMe::timeDiffDeq(const struct timeval& begin, const struct timeval& end) {
+	long	seconds  = end.tv_sec - begin.tv_sec;
+	long	usecDiff = end.tv_usec - begin.tv_usec;
+	this->_totalUsDeq  = seconds * 1000000L + usecDiff;
+}
+
+void	PmergeMe::displayVecComparisons(){
+	cout << GREEN << "Theoretical max comparisons: ";
+	cout << fordJohnsonWorstCase(_size) << endl;
+	cout << BLUE << "Number of comparisons:       ";
+	cout << PmergeMe::nbr_of_comps << RESET << endl;
+}

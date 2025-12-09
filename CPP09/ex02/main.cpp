@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:52:18 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/08 13:48:55 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 10:43:28 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <deque>
+#include <sys/time.h>
 
 int main(int argc, char **argv) {
 	
@@ -25,7 +26,6 @@ int main(int argc, char **argv) {
 
 	std::vector<int>	numbersVec;
 	std::deque<int>		numbersDeq;
-	
 	for (int i = 1; i < argc; i++) {
 		std::string input = argv[i];
 		if (!PmergeMe::isValidInput(input))
@@ -35,20 +35,27 @@ int main(int argc, char **argv) {
 	}
 	if (PmergeMe::isDuplicates(numbersVec))
 		return 1;
-	
 	numbersDeq.assign(numbersVec.begin(), numbersVec.end());
 	
-	// start time
-	PmergeMe	SortObj(numbersVec);
-	SortObj.fordJohnsonSort(numbersVec);
-	// end time
+	// Vector sorting
+	struct timeval begin;
+	gettimeofday(&begin, NULL);
+	PmergeMe	SortVec(numbersVec);
+	SortVec.fordJohnsonSort(numbersVec);
+	struct timeval end;
+	gettimeofday(&end, NULL);
+	SortVec.timeDiffVec(begin, end);
 
-	// start time 
-	// PmergeMe	SortDeque(numbersDeq);
+	// Deque sorting
+	gettimeofday(&begin, NULL);
+	PmergeMe	SortDeque(numbersDeq);
 	// SortDeque.fordJohnsonSort(numbersDeq);
-	// end time
+	gettimeofday(&end, NULL);
 	
-	SortObj.display();
+	SortVec.displayVec();
+	SortVec.displayVecTime();
+	SortDeque.displayDeqTime();
+	SortVec.displayVecComparisons();
 
 	return 0;
 }
