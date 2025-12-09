@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:52:18 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/09 10:43:28 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 14:26:07 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,27 @@ int main(int argc, char **argv) {
 	
 	// Vector sorting
 	struct timeval begin;
+	struct timeval end;
 	gettimeofday(&begin, NULL);
 	PmergeMe	SortVec(numbersVec);
-	SortVec.fordJohnsonSort(numbersVec);
-	struct timeval end;
+	SortVec.VecFordJohnsonSort(numbersVec);
 	gettimeofday(&end, NULL);
 	SortVec.timeDiffVec(begin, end);
+	
+	PmergeMe::nbr_of_comps = 0;
 
 	// Deque sorting
-	gettimeofday(&begin, NULL);
+	struct timeval begin_d;
+	struct timeval end_d;
+	gettimeofday(&begin_d, NULL);
 	PmergeMe	SortDeque(numbersDeq);
-	// SortDeque.fordJohnsonSort(numbersDeq);
-	gettimeofday(&end, NULL);
-	
-	SortVec.displayVec();
+	SortDeque.DeqFordJohnsonSort(numbersDeq);
+	gettimeofday(&end_d, NULL);
+	SortDeque.timeDiffDeq(begin_d, end_d);
+
+	SortVec.VecDisplay();
 	SortVec.displayVecTime();
+	//SortDeque.DeqDisplay();
 	SortDeque.displayDeqTime();
 	SortVec.displayVecComparisons();
 
