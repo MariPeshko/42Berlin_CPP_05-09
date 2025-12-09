@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:19 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/05 16:57:43 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/08 13:37:24 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,15 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <deque>
 #include <cmath>
 
 #define DEBUG_RECURSION 0
 #define DEBUG_PART2 0
 #define FULL_DEBUG 0
 #define Jacobsthal 0
+#define SORTED 0
+
 #define RESET "\033[0m"
 #define YELLOW "\033[33m"
 #define GREEN "\033[32m"
@@ -37,8 +40,13 @@ struct	Pair {
 class PmergeMe {
 	
 	private:
+		PmergeMe(const PmergeMe& copy);
+		PmergeMe&	operator=(const PmergeMe& assign);
+
 		std::vector<int>	_numbers;
+		std::deque<int>		_numbers_deque;
 		std::vector<int>	_sorted_numbers;
+		std::deque<int>		_sorted_numbers_deque;
 		int					_size;
 
 		// Core algorithm functions
@@ -54,18 +62,14 @@ class PmergeMe {
 		void	buildSortedVector(std::vector<int>& vec, const std::vector<Pair>& pairs, 
 					int unpaired_element, bool has_unpaired);
 		
-		
 		// Utility functions
 		std::vector<size_t>	generateJacobsthalSequence(size_t n);
 		std::vector<size_t>	generateInsertionOrder(size_t pend_size);
 		void				insertInSortedVector(std::vector<int>& vec, int value, size_t bound);
 		
-
 	public:
 		PmergeMe(const std::vector<int> & _numbers);
 		~PmergeMe();
-		PmergeMe(const PmergeMe& copy);
-		PmergeMe&	operator=(const PmergeMe& assign);
 		
 		static long long	fordJohnsonWorstCase(int n);
 		static int			nbr_of_comps;
@@ -73,12 +77,13 @@ class PmergeMe {
 		
 		void		fordJohnsonSort(std::vector<int>& vec);
 		void		display();
-		static bool	isSortedAscending(const std::vector<int>& vec);
-
+		
 		// Parsing
 		static bool	isValidInput(const std::string & input);
 		static bool	parseString(const std::string & inputstr, std::vector<int> & numbers);
 		static bool	isDuplicates(const std::vector<int> & numbers);
+		// Utils
+		static bool	isSortedAscending(const std::vector<int>& vec);
 };
 
 #endif

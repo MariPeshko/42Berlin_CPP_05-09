@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:13 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/05 16:57:27 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/08 13:17:51 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ PmergeMe::PmergeMe(const PmergeMe &copy) : _numbers(copy._numbers),
 
 PmergeMe &PmergeMe::operator=(const PmergeMe &assign)
 {
-	if (this != &assign)
-	{
+	if (this != &assign) {
 		_numbers = assign._numbers;
 		_sorted_numbers = assign._sorted_numbers;
 	}
@@ -57,7 +56,7 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &assign)
 			cout << *it << " ";
 } */
 
-static void display_vector(const std::vector<int> & vct) {
+static void	display_vector(const std::vector<int> & vct) {
 	for (std::vector<int>::const_iterator it = vct.begin();
 		it != vct.end(); ++it)
 			cout << *it << " ";
@@ -65,13 +64,12 @@ static void display_vector(const std::vector<int> & vct) {
 }
 
 // Binary search for insertion with a bound
-void PmergeMe::insertInSortedVector(std::vector<int> &vec, int value, size_t bound)
+void	PmergeMe::insertInSortedVector(std::vector<int> &vec, int value, size_t bound)
 {
 	size_t left = 0;
 	size_t right = bound;
 
-	while (left < right)
-	{
+	while (left < right) 	{
 		size_t mid = left + (right - left) / 2;
 		PmergeMe::nbr_of_comps++;
 		if (vec[mid] < value) {
@@ -221,8 +219,8 @@ void PmergeMe::reorderPairs(std::vector<Pair> &pairs,
 void PmergeMe::buildSortedVector(std::vector<int> &vec, const std::vector<Pair> &pairs,
 								 int unpaired_element, bool has_unpaired)
 {
-	std::vector<int> main_chain;	// (a1, a2, ...)
-	std::vector<int> pend_elements; // (b1, b2, ...) + unpaired
+	std::vector<int>	main_chain;	   // (a1, a2, ...)
+	std::vector<int>	pend_elements; // (b1, b2, ...) + unpaired
 	
 	if (DEBUG_PART2) cout << ORANGE << "PART2. Building a sorted vector.\n";
 	if (DEBUG_PART2) cout << YELLOW <<  "b1 = " << pairs[0].smaller << " and it first goes to main_chain" << RESET << endl;
@@ -251,13 +249,13 @@ void PmergeMe::buildSortedVector(std::vector<int> &vec, const std::vector<Pair> 
 	// Start with main chain
 	vec = main_chain;
 	// Generate optimal insertion order using Jacobsthal sequence
-	std::vector<size_t> insertion_order;
-	insertion_order = generateInsertionOrder(pend_elements.size());
+	std::vector<size_t> insert_order;
+	insert_order = generateInsertionOrder(pend_elements.size());
 
 	if (Jacobsthal) {
 		cout << GREEN << "Jacobsthal insertion order: ";
-		for (size_t i = 0; i < insertion_order.size(); ++i) {
-			cout << insertion_order[i] << " ";
+		for (size_t i = 0; i < insert_order.size(); ++i) {
+			cout << insert_order[i] << " ";
 		}
 		cout << RESET << endl;
 	}
@@ -283,9 +281,9 @@ void PmergeMe::buildSortedVector(std::vector<int> &vec, const std::vector<Pair> 
 	}
 		
 	// Insert pend elements in Jacobsthal order
-	for (size_t i = 0; i < insertion_order.size(); ++i)
+	for (size_t i = 0; i < insert_order.size(); ++i)
 	{
-		size_t index = insertion_order[i];
+		size_t index = insert_order[i];
 		if (index < pend_elements.size())
 		{
 			if (FULL_DEBUG) cout << GREEN << "i is " << i << "; index is " << index << "; ";
@@ -319,24 +317,24 @@ void PmergeMe::buildSortedVector(std::vector<int> &vec, const std::vector<Pair> 
 std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
 {
 
-	std::vector<size_t> jacobsthal;
+	std::vector<size_t> jac_seq;
 	if (n == 0)
-		return jacobsthal;
-	jacobsthal.push_back(1); // J(1) = 1
+		return jac_seq;
+	jac_seq.push_back(1); // J(1) = 1
 	if (n == 1)
-		return jacobsthal;
-	jacobsthal.push_back(1); // J(2) = 1
+		return jac_seq;
+	jac_seq.push_back(1); // J(2) = 1
 	if (n == 2)
-		return jacobsthal;
+		return jac_seq;
 
 	// J(k) = J(k-1) + 2*J(k-2)
 	for (size_t i = 3; i <= n; ++i)
 	{
-		size_t next = jacobsthal[i - 2] + 2 * jacobsthal[i - 3]; // ??
-		jacobsthal.push_back(next);
+		size_t next = jac_seq[i - 2] + 2 * jac_seq[i - 3]; // ??
+		jac_seq.push_back(next);
 	}
 
-	return jacobsthal;
+	return jac_seq;
 }
 
 // порядок Якобсталя: i=3, 2, 5, 4, 11, ...)
@@ -350,23 +348,22 @@ std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
 pend_elements[0] = b₂  ← Індекс масиву 0 = класичний b₂ */
 /* Класичний порядок: (1), (3,2), (5,4) → НЕ потрібен b₁, бо він уже в main_chain
 Потрібний порядок: (b₃,b₂), (b₅,b₄) = індекси [1,0], [3,2] */
-std::vector<size_t> PmergeMe::generateInsertionOrder(size_t pend_size)
+std::vector<size_t>	PmergeMe::generateInsertionOrder(size_t pend_size)
 {
-	std::vector<size_t> insertion_order;
+	std::vector<size_t>	insert_order;
 	if (pend_size == 0)
-		return insertion_order;
+		return insert_order;
 
-	std::vector<size_t> jacobsthal = generateJacobsthalSequence(20);
-	std::vector<bool> inserted(pend_size, false);
+	std::vector<size_t>	jac_seq = generateJacobsthalSequence(20);
+	std::vector<bool>	inserted(pend_size, false);
 
 	// Класична послідовність Якобсталя: 1, 3, 5, 11, 21, ...
 	// Групи вставки: (1), (3,2), (5,4), (11,10,9,8,7,6), ...
 	// Але b₁ уже в main_chain, тому починаємо з групи (3,2)
 	size_t group_end = 1; // Початкова межа (b₁ уже оброблено)
 
-	for (size_t j_index = 1; j_index < jacobsthal.size() && insertion_order.size() < pend_size; ++j_index)
-	{
-		size_t jacob_num = jacobsthal[j_index]; // J₂=3, J₃=5, J₄=11, ...
+	for (size_t j_index = 1; j_index < jac_seq.size() && insert_order.size() < pend_size; ++j_index) {
+		size_t jacob_num = jac_seq[j_index]; // J₂=3, J₃=5, J₄=11, ...
 
 		// Обмежуємо Jacob число розміром pend_elements + 1 (тому що b₁ не в pend)
 		size_t current_end = std::min(jacob_num, pend_size + 1);
@@ -375,17 +372,15 @@ std::vector<size_t> PmergeMe::generateInsertionOrder(size_t pend_size)
 				  << " down to b" << (group_end + 1) << endl;
 
 		// Вставляємо елементи у зворотному порядку від current_end до group_end+1
-		for (size_t b_index = current_end; b_index > group_end; --b_index)
-		{
+		for (size_t b_index = current_end; b_index > group_end; --b_index) {
 			// Конвертуємо класичний індекс b_i в індекс pend_elements
 			// b₂ → pend[0], b₃ → pend[1], b₄ → pend[2], ...
-			if (b_index >= 2)
-			{									 // Пропускаємо b₁ (він уже в main_chain)
+			if (b_index >= 2) { // Пропускаємо b₁ (він уже в main_chain)
 				size_t pend_index = b_index - 2; // b₂→0, b₃→1, b₄→2, ...
 				if (pend_index < pend_size && !inserted[pend_index])
 				{
 					if (Jacobsthal) cout << "Adding b" << b_index << " → pend_index " << pend_index << endl;
-					insertion_order.push_back(pend_index);
+					insert_order.push_back(pend_index);
 					inserted[pend_index] = true;
 				}
 			}
@@ -393,21 +388,20 @@ std::vector<size_t> PmergeMe::generateInsertionOrder(size_t pend_size)
 		group_end = current_end;
 	}
 	// Додаємо решту елементів (якщо є)
-	for (size_t i = 0; i < pend_size; ++i)
-	{
+	for (size_t i = 0; i < pend_size; ++i) {
 		if (!inserted[i])
 		{
-			insertion_order.push_back(i);
+			insert_order.push_back(i);
 			inserted[i] = true;
 		}
 	}
 
-	return insertion_order;
+	return insert_order;
 }
 
 void	PmergeMe::display()
 {
-	cout << GREEN << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nBefore: ";
+	cout << YELLOW << "Before: ";
 	if (_size <= 15) {
 		for (std::vector<int>::const_iterator it = _numbers.begin();
 			 it != _numbers.end(); ++it)
@@ -439,30 +433,29 @@ void	PmergeMe::display()
 		std::advance(it, _sorted_numbers.size() - 5);
 		cout << *it;
 	}
-	cout << endl;
-	if (isSortedAscending(_sorted_numbers)) cout << GREEN << "Sorted correctly!" << RESET << endl;
+	cout << RESET << endl;
+	if (SORTED) {
+		if (isSortedAscending(_sorted_numbers)) cout << GREEN << "Sorted correctly!" << RESET << endl;
 			else cout << RED << "Error. Not sorted correctly" << RESET << endl;
-	cout << YELLOW << "Theoretical max comparisons: " << fordJohnsonWorstCase(_size) << endl;
+	}
+	cout << "Time to process a range of 5 elements with std::vector:" << endl;
+	cout << "Time to process a range of 5 elements with std::deque: " << endl;
+	cout << GREEN << "Theoretical max comparisons: " << fordJohnsonWorstCase(_size) << endl;
 	cout << BLUE << "Number of comparisons:       " << PmergeMe::nbr_of_comps << RESET << endl;
 }
 
 // static
 bool PmergeMe::isValidInput(const string &input)
 {
-	if (input.empty())
-	{
+	if (input.empty()) {
 		cerr << "Error: empty input" << endl;
 		return false;
-	}
-	else if (input[0] == '-')
-	{
+	} else if (input[0] == '-')	{
 		cerr << "Error" << endl; // negative integer
 		return false;
 	}
-	for (size_t i = 0; i < input.length(); i++)
-	{
-		if (!std::isdigit(static_cast<unsigned char>(input[i])))
-		{
+	for (size_t i = 0; i < input.length(); i++)	{
+		if (!std::isdigit(static_cast<unsigned char>(input[i]))) {
 			cerr << "Error: " << input[i] << " not a digit" << endl;
 			return false;
 		}
@@ -475,13 +468,11 @@ bool PmergeMe::parseString(const string &inputstr, std::vector<int> &numbers)
 
 	std::istringstream iss(inputstr);
 	long number = 0;
-	if (!(iss >> number) || !iss.eof())
-	{
+	if (!(iss >> number) || !iss.eof())	{
 		cerr << "Error: Invalid integer conversion." << endl;
 		return false;
 	}
-	if (number > INT_MAX || number < 0)
-	{
+	if (number > INT_MAX || number < 0)	{
 		cerr << "Error" << endl;
 		return false;
 	}
@@ -509,18 +500,18 @@ bool PmergeMe::isDuplicates(const std::vector<int> &numbers)
 
 long long PmergeMe::fordJohnsonWorstCase(int n)
 {
-    long long C = 0;
-    for (int i = 1; i <= n; ++i)
-        C += (long long)std::ceil(log2(3.0 * i / 4.0));
-    return C;
+	long long C = 0;
+	for (int i = 1; i <= n; ++i)
+		C += (long long)std::ceil(log2(3.0 * i / 4.0));
+	return C;
 }
 
 bool PmergeMe::isSortedAscending(const std::vector<int>& vec)
 {
-    if (vec.size() < 2) return true;
-    for (size_t i = 1; i < vec.size(); ++i) {
-        if (vec[i - 1] > vec[i]) return false;
-    }
-    return true;
+	if (vec.size() < 2) return true;
+	for (size_t i = 1; i < vec.size(); ++i) {
+		if (vec[i - 1] > vec[i]) return false;
+	}
+	return true;
 }
 
