@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/12 17:03:52 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/12 21:04:51 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 16:46:10 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ RPN& RPN::operator=(const RPN& assign) {
 }
 
 bool	RPN::isValidInput(const std::string & input) {
+	
 	if (input.empty()) {
 		std::cerr << "Error" << std::endl;
 		return false;
@@ -39,6 +40,7 @@ bool	RPN::isValidInput(const std::string & input) {
 		std::cerr << "Error" << std::endl;
 		return false;
 	}
+	
 	int j = 0;
 	for (size_t i = 0; i < input.length(); i++) {
 		char c = input[i];
@@ -57,6 +59,7 @@ void	RPN::Calculate(const std::string & input) {
 	if (!isValidInput(input)) {
 		return ;
 	}
+	
 	for (size_t i = 0; i < input.length(); i++) {
 		char c = input[i];
 		if (std::isdigit(c)) {
@@ -70,6 +73,7 @@ void	RPN::Calculate(const std::string & input) {
 				return ;
 		}
 	}
+	
 	if (_rev_notation.size() != 1) {
 		std::cerr << "Error: Stack contains more than one number.\n";
 		std::cerr << "Wrong format of reversed polish notation" << std::endl;

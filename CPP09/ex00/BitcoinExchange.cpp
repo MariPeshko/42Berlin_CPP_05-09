@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 18:29:56 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/10/12 17:07:08 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 16:42:43 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,8 @@ bool	BitcoinExchange::isValidDate(const std::string& date) const {
 
 double	BitcoinExchange::CalcAmount(const std::string & date, double value) const {
 
-	std::map<std::string, double>::const_iterator it;
+	std::map<std::string, double>::const_iterator	it;
+	
 	it = _database.find(date);
 	if (it != _database.end()) {
 		return it->second * value;
@@ -216,9 +217,11 @@ double	BitcoinExchange::CalcAmount(const std::string & date, double value) const
 	}
 }
 
+// Find the first date that is greater than the target date
 double	BitcoinExchange::findClosestRate(const std::string& date) const {
-	// Find the first date that is greater than the target date
+
 	std::map<std::string, double>::const_iterator it = _database.upper_bound(date);
+	
 	if (it == _database.begin())
 		return it->second;
 	--it; // closest earlier date

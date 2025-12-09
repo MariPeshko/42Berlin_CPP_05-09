@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:13 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/09 15:02:46 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 16:38:02 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,13 @@ static void display_deque(const std::deque<int> & deq) {
 
 static void	display_vector(const std::vector<int> & vct) {
 	for (std::vector<int>::const_iterator it = vct.begin();
+		it != vct.end(); ++it)
+			cout << *it << " ";
+	cout << endl;
+}
+
+static void	display_vector(const std::vector<size_t> & vct) {
+	for (std::vector<size_t>::const_iterator it = vct.begin();
 		it != vct.end(); ++it)
 			cout << *it << " ";
 	cout << endl;
@@ -378,9 +385,25 @@ void	PmergeMe::buildSortedDeq(std::deque<int> &deq, const std::deque<Pair> &pair
 	}			
 }
 
-std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
+/**
+ * Formula J(k) = J(k-1) + 2*J(k-2)
+ * 
+ * @param n is hard-coded 15. The biggest number is a sequence is 10923.
+ * It is enough for test of this program. Up to 10000 numbers.
+ * 
+ * Note:
+ * k is the mathematical position (1st, 2nd, 3rd, etc.). 
+ * i is the loop counter, but array indices are 0-based.
+ * 
+ * Mathematical Index J(1) == Array Index jac_seq[0]
+ * 
+ * We need to offset by 1 to convert from mathematical indexing 
+ * (1-based) to array indexing (0-based)
+ */
+std::vector<size_t>	PmergeMe::generateJacobsthalSequence(size_t n)
 {
-	std::vector<size_t> jac_seq;
+	std::vector<size_t>	jac_seq;
+	
 	if (n == 0)
 		return jac_seq;
 	jac_seq.push_back(1); // J(1) = 1
@@ -390,10 +413,8 @@ std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
 	if (n == 2)
 		return jac_seq;
 
-	// J(k) = J(k-1) + 2*J(k-2)
-	for (size_t i = 3; i <= n; ++i)
-	{
-		size_t next = jac_seq[i - 2] + 2 * jac_seq[i - 3]; // ??
+	for (size_t i = 3; i <= n; ++i) {
+		size_t next = jac_seq[i - 2] + 2 * jac_seq[i - 3];
 		jac_seq.push_back(next);
 	}
 
@@ -401,49 +422,58 @@ std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
 }
 
 /**
- * порядок Якобсталя: i=3, 2, 5, 4, 11, ...)
- * Це дозволить вставляти елементи у ланцюги довжиною 2^k - 1,
- * що вимагає найменшої кількості порівнянь.
+ * Function that generates the insertion index sequence pi for the current
+ * length of Pend List.
  * 
- * функція, яка генерує послідовність індексів вставки pi для поточної
- * довжини Вашого Pend List
+ * This allows inserting elements into chains of length 2^k - 1,
+ * which requires the minimum number of comparisons.
  * 
- * У main_chain вже є b₁, тому pend_elements містить: 
- * pend_elements[0] = b₂  ← Індекс масиву 0 = класичний b₂
- * Класичний порядок: (1), (3,2), (5,4) → НЕ потрібен b₁, бо він уже в main_chain
- * Потрібний порядок: (b₃,b₂), (b₅,b₄) = індекси [1,0], [3,2]
+ * Groups: Insertion happens in groups. Each group starts with an element 
+ * whose index corresponds to a Jacobsthal number (for example, b3, b5, b11).
+ * This guarantees that elements that will have the greatest comparison savings 
+ * are inserted first, before their potential insertion positions are "spoiled" 
+ * (increased) by subsequent insertions.
+ * 
+ * The main_chain already contains b₁, so pend_elements contains: 
+ * pend_elements[0] = b₂  ← Array index 0 = classic b₂.
+ * Classic order: (1), (3,2), (5,4), (11,10,9,8,7,6), ... → b₁ NOT needed, 
+ * as it's already in main_chain.
+ * Required order: (b₃,b₂), (b₅,b₄) = indices [1,0], [3,2]
  */
 std::vector<size_t>	PmergeMe::generateInsertionOrder(size_t pend_size)
 {
+	if (Jacobsthal) cout << BLUE << "Generating insertion order for pending size: " << pend_size << RESET << endl;
 	std::vector<size_t>	insert_order;
 	if (pend_size == 0)
 		return insert_order;
 
-	std::vector<size_t>	jac_seq = generateJacobsthalSequence(20);
+	std::vector<size_t>	jac_seq = generateJacobsthalSequence(15);
+	if (Jacobsthal) {
+		cout << BLUE << "JacobsthalSequence: ";
+		display_vector(jac_seq); cout << RESET;
+	}
+	
 	std::vector<bool>	inserted(pend_size, false);
+	size_t				group_end = 1; // Initial boundary (b₁ already processed)
 
-	// Класична послідовність Якобсталя: 1, 3, 5, 11, 21, ...
-	// Групи вставки: (1), (3,2), (5,4), (11,10,9,8,7,6), ...
-	// Але b₁ уже в main_chain, тому починаємо з групи (3,2)
-	size_t group_end = 1; // Початкова межа (b₁ уже оброблено)
-
-	for (size_t j_index = 1; j_index < jac_seq.size() && insert_order.size() < pend_size; ++j_index) {
+	for (size_t j_index = 1; j_index < jac_seq.size() &&
+		 	insert_order.size() < pend_size; ++j_index)
+	{
 		size_t jacob_num = jac_seq[j_index]; // J₂=3, J₃=5, J₄=11, ...
 
-		// Обмежуємо Jacob число розміром pend_elements + 1 (тому що b₁ не в pend)
+		// Limit Jacob number to pend_elements size + 1 (because b₁ is not in pend)
 		size_t current_end = std::min(jacob_num, pend_size + 1);
 
 		if (Jacobsthal) cout << "Jacob group " << j_index << ": from b" << current_end
 				  << " down to b" << (group_end + 1) << endl;
 
-		// Вставляємо елементи у зворотному порядку від current_end до group_end+1
+		// Insert elements in reverse order from current_end to group_end+1
 		for (size_t b_index = current_end; b_index > group_end; --b_index) {
-			// Конвертуємо класичний індекс b_i в індекс pend_elements
+			// Convert classic index b_i to pend_elements index
 			// b₂ → pend[0], b₃ → pend[1], b₄ → pend[2], ...
-			if (b_index >= 2) { // Пропускаємо b₁ (він уже в main_chain)
-				size_t pend_index = b_index - 2; // b₂→0, b₃→1, b₄→2, ...
-				if (pend_index < pend_size && !inserted[pend_index])
-				{
+			if (b_index >= 2) { // Skip b₁ (already in main_chain)
+				size_t	pend_index = b_index - 2; // b₂→0, b₃→1, b₄→2, ...
+				if (pend_index < pend_size && !inserted[pend_index]) {
 					if (Jacobsthal) cout << "Adding b" << b_index << " → pend_index " << pend_index << endl;
 					insert_order.push_back(pend_index);
 					inserted[pend_index] = true;
@@ -452,7 +482,7 @@ std::vector<size_t>	PmergeMe::generateInsertionOrder(size_t pend_size)
 		}
 		group_end = current_end;
 	}
-	// Додаємо решту елементів (якщо є)
+	// Add remaining elements (if any)
 	for (size_t i = 0; i < pend_size; ++i) {
 		if (!inserted[i])
 		{

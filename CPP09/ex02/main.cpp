@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:52:18 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/09 15:05:20 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 16:04:40 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ int main(int argc, char **argv) {
 	numbersDeq.assign(numbersVec.begin(), numbersVec.end());
 	
 	// Vector sorting
-	struct timeval begin;
-	struct timeval end;
+	struct timeval	begin;
+	struct timeval	end;
 	gettimeofday(&begin, NULL);
 	PmergeMe	SortVec(numbersVec);
 	SortVec.VecFordJohnsonSort(numbersVec);
