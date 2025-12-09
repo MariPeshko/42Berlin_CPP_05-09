@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:19 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/09 14:23:55 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 15:04:31 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #define DEBUG_PART2 0
 #define FULL_DEBUG 0
 #define Jacobsthal 0
-#define SORTED 1
+#define SORTED 0
 
 #define RESET "\033[0m"
 #define YELLOW "\033[33m"
@@ -103,7 +103,6 @@ class PmergeMe {
 			}
 			container.insert(container.begin() + left, value);
 		}
-		void	insertInSortedDeque(std::deque<int> &deq, int value, size_t bound);
 		
 		// µs (microsecond) is a unit of time equal to one-millionth of a second
 		long	_totalUsVec;

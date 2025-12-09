@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:52:18 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/09 14:26:07 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 15:05:20 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
 
 	std::vector<int>	numbersVec;
 	std::deque<int>		numbersDeq;
+	
 	for (int i = 1; i < argc; i++) {
 		std::string input = argv[i];
 		if (!PmergeMe::isValidInput(input))
@@ -49,17 +50,15 @@ int main(int argc, char **argv) {
 	PmergeMe::nbr_of_comps = 0;
 
 	// Deque sorting
-	struct timeval begin_d;
-	struct timeval end_d;
-	gettimeofday(&begin_d, NULL);
+	gettimeofday(&begin, NULL);
 	PmergeMe	SortDeque(numbersDeq);
 	SortDeque.DeqFordJohnsonSort(numbersDeq);
-	gettimeofday(&end_d, NULL);
-	SortDeque.timeDiffDeq(begin_d, end_d);
+	gettimeofday(&end, NULL);
+	SortDeque.timeDiffDeq(begin, end);
 
+	// Displaying
 	SortVec.VecDisplay();
 	SortVec.displayVecTime();
-	//SortDeque.DeqDisplay();
 	SortDeque.displayDeqTime();
 	SortVec.displayVecComparisons();
 

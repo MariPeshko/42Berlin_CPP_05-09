@@ -6,7 +6,7 @@
 /*   By: mpeshko <mpeshko@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:59:13 by mpeshko           #+#    #+#             */
-/*   Updated: 2025/12/09 14:24:13 by mpeshko          ###   ########.fr       */
+/*   Updated: 2025/12/09 15:02:46 by mpeshko          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,27 +149,13 @@ void	PmergeMe::DeqFordJohnsonSort(std::deque<int>& deq) {
 	std::deque<int>	larger_elements;
 	for (size_t i = 0; i < pairs.size(); ++i)
 		larger_elements.push_back(pairs[i].larger);
-
-	if (DEBUG_PART1) {
-		cout << YELLOW << "Larger elements for recursive sort: ";
-		display_deque(larger_elements); cout << RESET;
-	}
+		
 	// Step 3: Sort recursively
 	DeqFordJohnsonSort(larger_elements);
 	// larger_elements is now SORTED
-	if (DEBUG_RECURSION || DEBUG_PART2) {
-		cout << ORANGE << "SORTED MAIN CHAIN A : ";
-		display_deque(larger_elements); cout << RESET;
-	}
+	
 	// Step 4: Reorder pairs based on sorted larger elements
 	reorderPairs(pairs, larger_elements);
-	if (DEBUG_PART1 || DEBUG_PART2) {
-		cout << BLUE << "Pairs. Reordered: ";
-		for (size_t i = 0; i < pairs.size(); ++i)
-			cout << "(" << pairs[i].smaller << "," << pairs[i].larger << ") ";
-		if (has_unpaired) cout << " + unpaired: " << unpaired_element;
-		cout << RESET << endl;
-	}
 	// Step 5: Build final result in the original deq
 	buildSortedDeq(deq, pairs, unpaired_element, has_unpaired);
 	_sorted_numbers_deque = deq;
@@ -340,8 +326,6 @@ void	PmergeMe::buildSortedDeq(std::deque<int> &deq, const std::deque<Pair> &pair
 	std::deque<int>	main_chain;	   // (a1, a2, ...)
 	std::deque<int>	pend_elements; // (b1, b2, ...) + unpaired
 	
-	if (DEBUG_PART2) cout << ORANGE << "PART2. Building a sorted deque.\n";
-	if (DEBUG_PART2) cout << BLUE <<  "b1 = " << pairs[0].smaller << " and it first goes to main_chain" << RESET << endl;
 	for (size_t i = 0; i < pairs.size(); ++i)
 	{
 		if (i == 0)
@@ -353,17 +337,7 @@ void	PmergeMe::buildSortedDeq(std::deque<int> &deq, const std::deque<Pair> &pair
 
 	if (has_unpaired)
 		pend_elements.push_back(unpaired_element);
-
-	if (DEBUG_PART2) {
-		cout << BLUE << "MAIN CHAIN:    ";
-		for (size_t i = 0; i < main_chain.size(); ++i)
-			cout << main_chain[i] << " ";
-		cout << endl;
-		cout << "PEND ELEMENTS: ";
-		for (size_t i = 0; i < pend_elements.size(); ++i)
-			cout << pend_elements[i] << " ";
-		cout << RESET << endl;
-	}
+		
 	// Start with main chain
 	deq = main_chain;
 	// Generate optimal insertion order using Jacobsthal sequence
@@ -380,79 +354,28 @@ void	PmergeMe::buildSortedDeq(std::deque<int> &deq, const std::deque<Pair> &pair
 	// bound the binary search for b_i by the current position of its partner a_i in the main chain
 	// keep track of indexposition of pairs
 	std::vector<size_t>	indexposition(pairs.size(), 0);
-	if (FULL_DEBUG) cout << "_ _ Index position calculation for a bound _ _" << endl;
 	for (size_t i = 1; i < pairs.size(); i++) {
-		if (FULL_DEBUG) cout << i + 1 << " pair. Smaller b_" << i + 1 << " element " << pairs[i].smaller << endl;
 		for (size_t j = 0; j < main_chain.size(); j++) {
 			if (pairs[i].larger == main_chain[j]) {
 				indexposition[i - 1] = j;
-				if (FULL_DEBUG) cout << "index of a_" << i + 1 << " element " << pairs[i].larger << " in main chain is: ";
-				if (FULL_DEBUG) cout << j << endl;  
 			}
 		}
 	}
 	if (has_unpaired) {
 		indexposition.push_back(main_chain.size());
-		if (FULL_DEBUG) cout << "For unpaired_element " << unpaired_element << " index position is the ";
-		if (FULL_DEBUG) cout << "whole main_chain size " << main_chain.size() << endl;  
 	}
 	// Insert pend elements in Jacobsthal order
 	for (size_t i = 0; i < insert_order.size(); ++i) {
 		size_t index = insert_order[i];
 		if (index < pend_elements.size()) {
-			if (FULL_DEBUG) cout << GREEN << "i is " << i << "; index is " << index << "; ";
-			if (FULL_DEBUG) cout << "indexposition[index] is " << indexposition[index] << endl;
 			size_t bound;
-			if (has_unpaired && index == (pend_elements.size() - 1)) {
-				if (FULL_DEBUG) cout << "for unpaired element we use binary search for a whole chain" << endl;
+			if (has_unpaired && index == (pend_elements.size() - 1))
 				bound = deq.size();
-			}
 			else
 				bound = indexposition[index] + i;
-			if (FULL_DEBUG) {
-				cout << YELLOW << "Inserting pend_elements[" << index << "] = "
-				<< pend_elements[index] << endl;
-				cout << "bound: " << bound << RESET << endl;
-			}
-			insertInSortedDeque(deq, pend_elements[index], bound);
+			insertInSortedContainer(deq, pend_elements[index], bound);
 		}
-	}
-	if (DEBUG_PART2) {
-		cout << "CURRENT SORTED deque: ";
-		display_deque(deq); 
-		if (isSortedAscending(deq)) cout << GREEN << "Sorted correctly!" << RESET << endl;
-		else cout << RED << "Error. Not sorted correctly" << RESET << endl;
-		cout << endl;
-	}							
-}
-
-// Specialized version for deque
-void	PmergeMe::insertInSortedDeque(std::deque<int> &deq, int value, size_t bound)
-{
-    size_t left = 0;
-    size_t right = bound;
-
-    while (left < right) {
-        size_t mid = left + (right - left) / 2;
-        PmergeMe::nbr_of_comps++;
-        if (deq[mid] < value) {
-            left = mid + 1;
-        } else {
-            right = mid;
-        }
-    }
-    
-    // More efficient insertion for deque
-    if (left == 0) {
-        deq.push_front(value);  // O(1) for deque!
-    } else if (left == deq.size()) {
-        deq.push_back(value);   // O(1) for deque!
-    } else {
-        // For middle insertion, use direct iterator construction
-        std::deque<int>::iterator it = deq.begin();
-        std::advance(it, left);  // More efficient than begin() + left for deque
-        deq.insert(it, value);
-    }
+	}			
 }
 
 std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
@@ -616,18 +539,6 @@ void	PmergeMe::DeqDisplay()
 	}
 }
 
-void	PmergeMe::displayVecTime(){
-	cout << "Time to process a range of " << this->_size << " elements with std::vector: ";
-	cout << _totalUsVec << " µs" << endl;
-	cout << "In ms = " << (_totalUsVec / 1000) << " ms" << std::endl;
-}
-
-void	PmergeMe::displayDeqTime(){
-	cout << "Time to process a range of " << this->_size << " elements with std::deque:  ";
-	cout << _totalUsDeq << " µs" << endl;
-	cout << "In ms = " << (_totalUsDeq / 1000) << " ms" << std::endl;
-}
-
 // static
 bool PmergeMe::isValidInput(const string &input)
 {
@@ -707,6 +618,18 @@ void	PmergeMe::timeDiffDeq(const struct timeval& begin, const struct timeval& en
 	this->_totalUsDeq  = seconds * 1000000L + usecDiff;
 
 	this->_deq_comparisons = PmergeMe::nbr_of_comps;
+}
+
+void	PmergeMe::displayVecTime(){
+	cout << "Time to process a range of " << this->_size << " elements with std::vector: ";
+	cout << _totalUsVec << " µs" << endl;
+	//cout << "In ms = " << (_totalUsVec / 1000) << " ms" << std::endl;
+}
+
+void	PmergeMe::displayDeqTime(){
+	cout << "Time to process a range of " << this->_size << " elements with std::deque:  ";
+	cout << _totalUsDeq << " µs" << endl;
+	//cout << "In ms = " << (_totalUsDeq / 1000) << " ms" << std::endl;
 }
 
 void	PmergeMe::displayVecComparisons(){
